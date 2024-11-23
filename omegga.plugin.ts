@@ -183,17 +183,14 @@ export default class basesCoolPlugin implements OmeggaPlugin {
   }
 
   async checkRestrictions(command, player: OmeggaPlayer, interact) {
-    this.omegga.whisper("base4", "made it here...?");
     if (!this.config['tmi-disruptive-commands'] && Object.keys(this.disruptiveCommands).includes(command)) {
       return `Disruptive commands such as <b>${command}</b> have been disabled.`;
     }
 
-    this.omegga.whisper("base4", "made it here...?");
     if (this.config['tmi-disabled-commands'].includes(command)) {
       return `The command <b>${command}</b> has been disabled.`;
     }
 
-    this.omegga.whisper("base4", "made it here...?");
     if (
       !player.isHost() &&
       !player.getRoles().some((role) => (this.config['tmi-restricted-authorized']).includes(role)) &&
@@ -204,7 +201,6 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     ) {
       return `You do not have permission to use the command <b>${command}</b>.`;
     }
-    this.omegga.whisper("base4", "made it here...?");
 
     let name;
     let hasClearance;
