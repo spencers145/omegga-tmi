@@ -78,7 +78,7 @@ module.exports = class basesCoolPlugin {
     }, timeoutLength);
   }
 
-  addPlayerCallback(id, type, resetCallback, endCallback, timeoutTime) {
+  addPlayerCallback(id, type, resetCallback, endCallback, timeoutLength) {
     if (!this.playerCallbacks[id]) {
       this.playerCallbacks[id] = {};
     }
