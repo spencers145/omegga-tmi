@@ -295,7 +295,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
 
           const thisPlayer = this.omegga.getPlayer(interaction.player.name); // get this player
           const players = this.omegga.getPlayers(); // get all online
-          const playerNames = [];
+          const playerNames: string[] = [];
           players.forEach((player) => {
             playerNames.push(player.name); // generate an array of all their names to make life easier later
           });
@@ -305,6 +305,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           if (host) {
             if (!playerNames.includes(host.name)) hostOnline = false; // if they're not online then set host to false
           }
+
+          this.omegga.whisper(interaction.player.name, "made it here...?");
 
           // are there any restrictions preventing this command from running?
           // e.g. is it restricted and the player who triggered it is not authorized?
@@ -413,7 +415,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             this.omegga.broadcast(`<b>${interaction.player.name}</b> just hurt everyone for ${commandArray[1]}...`)
             break;
           case "killhost":
-            if (host) {
+            if (hostOnline) {
               if (random < 1 / 100) {
                 this.omegga.writeln(`Server.Players.Kill "${host.name}"`);
                 this.omegga.broadcast(
