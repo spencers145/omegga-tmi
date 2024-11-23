@@ -1,0 +1,54 @@
+{
+  "name": "too-many-interacts",
+  "description": "Adds many, many commands triggered by the 'write to console' field of interact components.",
+  "author": "base4",
+  "config": {
+    "tmi-disable-authorization": {
+      "description": "Whether to ignore authorization entirely for unrestricted interact commands.",
+      "type": "boolean",
+      "default": true
+    },
+    "tmi-authorized": {
+      "description": "A list of roles that are authorized to use unrestricted TMI interact commands. Does nothing if authorization for unrestricted interact commands is disabled.",
+      "type": "list",
+      "itemType": "role",
+      "default": ["Default"]
+    },
+    "tmi-restricted-authorized": {
+      "description": "A list of roles that are authorized to use all TMI interact commands.",
+      "type": "list",
+      "itemType": "role",
+      "default": ["Admin"]
+    },
+    "tmi-restricted-commands": {
+      "description": "A list of interact commands that are restricted.",
+      "type": "list",
+      "itemType": "enum",
+      "options": [],
+      "default": []
+    },
+    "tmi-disabled-commands": {
+      "description": "A list of interact commands that are disabled entirely.",
+      "type": "list",
+      "itemType": "enum",
+      "options": [],
+      "default": []
+    },
+    "tmi-disruptive-commands": {
+      "description": "Whether to enable disruptive commands that can be used maliciously: killall, hurtall, kick, kicklottery, ownerlottery, grantrole, removerole, broadcast.",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "commands": [
+    {
+      "name": "/tmi",
+      "description": "Too Many Interacts main command. Lists all interact types.",
+      "args": [{
+        "name": "help",
+        "description": "Explains how to put special interacts on bricks.",
+        "required": false
+      }]
+    }
+  ]
+}
