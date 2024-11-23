@@ -1,5 +1,30 @@
-module.exports = class basesCoolPlugin {
-  constructor(omegga, config, store) {
+import { OmeggaPlugin, OL, PC, PS, OmeggaPlayer } from "omegga/dist";
+
+type Weapon = string;
+type PlayerID = string;
+
+type PlayerInteraction = {
+  id: string;
+  name: string;
+  controller: string;
+  pawn: string;
+}
+
+export class basesCoolPlugin implements OmeggaPlugin {
+  omegga: OL;
+  config: Record<string, any>;
+  store: PS;
+
+  roleLastGiven: Record<PlayerID, number>;
+  commands: Record<string, string>;
+  disruptiveCommands: Record<string, string>;
+  weapons: Array<Weapon>;
+
+  debounceNames: Record<PlayerID, PlayerInteraction>;
+  playerCallbacks: Record<PlayerID, Record<string, number>>;
+  playerIntervals: Record<PlayerID, Record<string, number>>;
+
+  constructor(omegga: OL, config: PC, store: PS) {
     this.omegga = omegga;
     this.config = config;
     this.store = store;
@@ -37,7 +62,7 @@ module.exports = class basesCoolPlugin {
     this.playerIntervals = {};
   }
 
-  debounceAddName(player) {
+  debounceAddName(player: PlayerInteraction) {
     if (this.debounceNames[player.id]) throw "";
     this.debounceNames[player.id] = player;
   }
@@ -55,7 +80,7 @@ module.exports = class basesCoolPlugin {
     }
   }
 
-  addPlayerInterval(id, type, intervalCallback, period, resetCallback, endCallback, timeoutLength) {
+  addPlayerInterval(id: string, type: string, intervalCallback, period, resetCallback, endCallback, timeoutLength) {
     if (!this.playerIntervals[id]) {
       this.playerIntervals[id] = {};
     }
@@ -103,7 +128,7 @@ module.exports = class basesCoolPlugin {
       this.omegga.whisper("base4", `${key}: ${interaction[key]}`);
     }*/
 
-    const extentArray = [...interaction.brick_size];
+    const extentArray: [number, number, number] = [0, 0, 0];
     let biggest = Math.max(extentArray[0], extentArray[1], extentArray[2]);
     extentArray[0] = biggest;
     extentArray[1] = biggest;
@@ -147,13 +172,14 @@ module.exports = class basesCoolPlugin {
 
   findWeapon(argument) {
     let match = false;
+    let gottenWeapon: Weapon;
     argument = argument.toLowerCase();
     this.weapons.forEach((weapon) => {
       if (!match && weapon.toLowerCase().includes(argument)) {
-        match = weapon;
+        gottenWeapon = weapon;
       }
     });
-    return !match ? false : "Weapon_" + match;
+    return !match ? "" : "Weapon_" + gottenWeapon;
   }
 
   async checkRestrictions(command, player, interact) {
@@ -275,8 +301,9 @@ module.exports = class basesCoolPlugin {
           });
 
           let host = this.omegga.host; // get the host
+          let hostOnline = true;
           if (host) {
-            if (!playerNames.includes(host.name)) host = false; // if they're not online then set host to false
+            if (!playerNames.includes(host.name)) hostOnline = false; // if they're not online then set host to false
           }
 
           // are there any restrictions preventing this command from running?
@@ -284,7 +311,7 @@ module.exports = class basesCoolPlugin {
           // e.g. is it secure and the player who built the brick it's on is not authorized to build it?
           // e.g. is it disabled?
           // if restrictions apply, throw inside the following funciton:
-          const issue = await this.checkRestrictions(commandArray[0], thisPlayer, interaction, true);
+          const issue = await this.checkRestrictions(commandArray[0], thisPlayer, interaction);
 
           if (issue !== true) {
             throw issue;
@@ -350,7 +377,14 @@ module.exports = class basesCoolPlugin {
             this.ensureGoodInput(commandArray, ["number"], 0);
             const targetArray = this.getTopCenter(interaction.brick_size, interaction.position);
             let time;
-            if (commandArray.length > 1) time = 1000 * (commandArray[1] <= 60 ? commandArray[1] : 60);
+            if (commandArray.length > 1) {
+              try {
+                Number(commandArray[1])
+                time = 1000 * (Number(commandArray[1]) <= 60 ? Number(commandArray[1]) : 60);
+              } catch {
+                time = 10000;
+              }
+            }
             else time = 10000;
             this.addPlayerInterval(interaction.player.id, "jail", () => {
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" ${targetArray[0]} ${targetArray[1]} ${targetArray[2]} 0`);
@@ -397,7 +431,7 @@ module.exports = class basesCoolPlugin {
             if (host.name) {
               this.omegga.writeln(`Server.Players.Damage "${host.name}" 0.01`);
               this.omegga.whisper(interaction.player.name, `<b>${host.name}</b> successfully annoyed.`);
-              this.omegga.whisper(host, `<b>${interaction.player.name}</b> is being annoying.`);
+              this.omegga.whisper(host.name, `<b>${interaction.player.name}</b> is being annoying.`);
               if (random > 50 / 100) {
                 this.omegga.writeln(`Server.Players.Damage "${interaction.player.name}" 5`);
               }
@@ -440,7 +474,7 @@ module.exports = class basesCoolPlugin {
             if (thisPlayer.getRoles().includes(commandArray[1])) {
             	this.omegga.writeln(`Chat.Command /REVOKEROLE "${commandArray[1]}" "${interaction.player.name}"`);	
             } else {
-              if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven + 10_000) {
+              if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
                 this.roleLastGiven[interaction.player.name] = Date.now();
                 this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[1]}" "${interaction.player.name}"`);
               }
@@ -466,13 +500,13 @@ module.exports = class basesCoolPlugin {
 
       this.omegga.whisper(player.name, "<u>available <b>TMI</b> commands</u>");
       Object.keys(this.commands).forEach(async (command) => {
-        const result = await this.checkRestrictions(command, player);
+        const result = await this.checkRestrictions(command, player, null);
         if (result === true) {
           this.omegga.whisper(player.name, `<b>${command}</b> - ${this.commands[command]}`);
         }
       });
       Object.keys(this.disruptiveCommands).forEach(async (command) => {
-        const result = await this.checkRestrictions(command, player);
+        const result = await this.checkRestrictions(command, player, null);
         if (result === true) {
           this.omegga.whisper(player.name, `<b>${command}</b> - ${this.disruptiveCommands[command]}`);
         }

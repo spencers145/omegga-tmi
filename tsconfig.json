@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".", // Allows relative imports from project root
+        "paths": {
+        "*": ["node_modules/*"]
+        },
+        "declaration": true // Generates type declaration files
+    },
+    //"include": ["../*"], // Include your source files
+    //"exclude": ["node_modules", "dist"] // Exclude unnecessary files
+}
