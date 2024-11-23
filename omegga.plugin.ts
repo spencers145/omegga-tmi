@@ -183,14 +183,17 @@ export default class basesCoolPlugin implements OmeggaPlugin {
   }
 
   async checkRestrictions(command, player: OmeggaPlayer, interact) {
+    this.omegga.whisper("base4", "made it here...?");
     if (!this.config['tmi-disruptive-commands'] && Object.keys(this.disruptiveCommands).includes(command)) {
       return `Disruptive commands such as <b>${command}</b> have been disabled.`;
     }
 
+    this.omegga.whisper("base4", "made it here...?");
     if (this.config['tmi-disabled-commands'].includes(command)) {
       return `The command <b>${command}</b> has been disabled.`;
     }
 
+    this.omegga.whisper("base4", "made it here...?");
     if (
       !player.isHost() &&
       !player.getRoles().some((role) => (this.config['tmi-restricted-authorized']).includes(role)) &&
@@ -201,6 +204,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     ) {
       return `You do not have permission to use the command <b>${command}</b>.`;
     }
+    this.omegga.whisper("base4", "made it here...?");
 
     let name;
     let hasClearance;
@@ -306,7 +310,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             if (!playerNames.includes(host.name)) hostOnline = false; // if they're not online then set host to false
           }
 
-          this.omegga.whisper(interaction.player.name, "made it here...?");
+          
 
           // are there any restrictions preventing this command from running?
           // e.g. is it restricted and the player who triggered it is not authorized?
