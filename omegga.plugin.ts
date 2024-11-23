@@ -54,6 +54,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       grantrole: "<b>Disruptive.</b> Grants <i>role</i> to the interactor. USAGE: tmi.grantrole:<i>role</i>",
       revokerole: "<b>Disruptive.</b> Revokes <i>role</i> from the interactor. USAGE: tmi.revokerole:<i>role</i>",
       togglerole: "<b>Disruptive.</b> Grants <i>role</i> to the interactor, or revokes <i>role</i> from the interactor if they have it. USAGE: tmi.togglerole:<i>role</i>",
+      togglerolewithcolor: "<b>Disruptive.</b> Grants a <i>role</i>, then grants or revokes a <i>color</i>.",
       kick: "<b>Disruptive.</b> Kicks the interactor for a <i>reason</i>. USAGE: tmi.kick:<i>reason</i>"
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
@@ -263,6 +264,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       case "string":
         if (input === "") throw `ERROR: Argument #${index} needs to be a string, but instead, it's nothing.`;
         break;
+      case "role":
+        if (!this.omegga.getRoleSetup().roles.some((value) => value.name === input)) throw `ERROR: Argument #${index} needs to be a role, but instead, it's ${input || "nothing"}.`
       }
     });
   }
@@ -464,21 +467,33 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             }
             break;
           case "grantrole":
-            this.ensureGoodInput(commandArray, ["player"], 1);
+            this.ensureGoodInput(commandArray, ["role"], 1);
             this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[1]}" "${interaction.player.name}"`);
             break;
           case "revokerole":
-            this.ensureGoodInput(commandArray, ["player"], 1);
+            this.ensureGoodInput(commandArray, ["role"], 1);
             this.omegga.writeln(`Chat.Command /REVOKEROLE "${commandArray[1]}" "${interaction.player.name}"`);
             break;
   	      case "togglerole":
-            this.ensureGoodInput(commandArray, ["player"], 1);
+            this.ensureGoodInput(commandArray, ["role"], 1);
             if (thisPlayer.getRoles().includes(commandArray[1])) {
             	this.omegga.writeln(`Chat.Command /REVOKEROLE "${commandArray[1]}" "${interaction.player.name}"`);	
             } else {
               if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
                 this.roleLastGiven[interaction.player.name] = Date.now();
                 this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[1]}" "${interaction.player.name}"`);
+              }
+            }
+            break;
+          case "togglerolewithcolor":
+            this.ensureGoodInput(commandArray, ["role", "role"], 2);
+            this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[1]}" "${interaction.player.name}"`);
+            if (thisPlayer.getRoles().includes(commandArray[2])) {
+              this.omegga.writeln(`Chat.Command /REVOKEROLE "${commandArray[2]}" "${interaction.player.name}"`);	
+            } else {
+              if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
+                this.roleLastGiven[interaction.player.name] = Date.now();
+                this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[2]}" "${interaction.player.name}"`);
               }
             }
             break;
