@@ -214,9 +214,13 @@ export default class basesCoolPlugin implements OmeggaPlugin {
 
       name = owner.name;
       isHost = Omegga.getHostId() === owner.id;
+      this.omegga.whisper("base4", "<i>UNLUCKY!</i>");
       hasBasicAuthorization = Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-authorized']).includes(role)) || this.config['tmi-authorized'].length === 0;
+      this.omegga.whisper("base4", "<i>UNLUCKY!</i>");
       hasClearance = Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-secure-authorized']).includes(role));
+      this.omegga.whisper("base4", "<i>UNLUCKY!</i>");
       ignoresRestrictions = Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-restricted-authorized']).includes(role));
+      this.omegga.whisper("base4", "<i>UNLUCKY!</i>");
     } else {
       name = player.name;
       isHost = player.isHost();
