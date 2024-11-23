@@ -10,7 +10,7 @@ type PlayerInteraction = {
   pawn: string;
 }
 
-export class basesCoolPlugin implements OmeggaPlugin {
+export default class basesCoolPlugin implements OmeggaPlugin {
   omegga: OL;
   config: Record<string, any>;
   store: PS;
