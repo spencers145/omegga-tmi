@@ -1,4 +1,4 @@
-import { OmeggaPlugin, OL, PC, PS, OmeggaPlayer } from "omegga/dist";
+import { OmeggaPlugin, OL, PC, PS, OmeggaPlayer, BrickInteraction } from "omegga/dist";
 
 type Weapon = string;
 type PlayerID = string;
@@ -123,12 +123,12 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     return [positionArray[0], positionArray[1], positionArray[2] + sizeArray[2] + 25.148];
   }
 
-  async getOwnerOfInteractedBrick(interaction) {
+  async getOwnerOfInteractedBrick(interaction: BrickInteraction) {
     /*for (let key in interaction) {
       this.omegga.whisper("base4", `${key}: ${interaction[key]}`);
     }*/
 
-    const extentArray: [number, number, number] = [0, 0, 0];
+    const extentArray: [number, number, number] = [...interaction.brick_size];
     let biggest = Math.max(extentArray[0], extentArray[1], extentArray[2]);
     extentArray[0] = biggest;
     extentArray[1] = biggest;
@@ -182,7 +182,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     return !match ? "" : "Weapon_" + gottenWeapon;
   }
 
-  async checkRestrictions(command, player, interact) {
+  async checkRestrictions(command, player: OmeggaPlayer, interact) {
     if (!this.config['tmi-disruptive-commands'] && Object.keys(this.disruptiveCommands).includes(command)) {
       return `Disruptive commands such as <b>${command}</b> have been disabled.`;
     }
