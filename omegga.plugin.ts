@@ -34,18 +34,19 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       kill: "Kills the interactor. USAGE: tmi.kill",
       lottery: "Has a percent <i>chance</i> to kill the interactor. USAGE: tmi.lottery:<i>chance</i>",
       unexist: "Teleports the interactor to the death barrier. USAGE: tmi.unexist",
-      goto: "Teleports the interactor to a specified <i>player</i>. USAGE: tmi.goto:<i>player</i>",
-      fetch: "Teleports a specified <i>player</i> to the brick. USAGE: tmi.fetch:<i>player</i>",
       tell: "Tells a <i>message</i> to a <i>player</i>. USAGE: tmi.tell:<i>player</i>,<i>message</i>",
       whisper: "Whispers a <i>message</i> to the interactor. USAGE: tmi.whisper:<i>message</i>",
-      broadcast: "Broadcasts a <i>message</i>. USAGE: tmi.broadcast:<i>message</i>",
       giveitem: "Gives a <i>weapon</i> some amount of <i>times</i>. USAGE: tmi.giveitem:<i>weapon</i>,<i>times</i>",
       takeitem: "Remove a <i>weapon</i> some amount of <i>times</i>. USAGE: tmi.takeitem:<i>weapon</i>,<i>times</i>",
-      jail: "Prevents the interactor from moving for some <i>time</i> in seconds. USAGE: tmi.jail:<i>time</i>"
+      goto: "Teleports the interactor to a specified <i>player</i>. USAGE: tmi.goto:<i>player</i>",
+      teleport: "Teleports the interactor to position <i>time</i> in seconds. USAGE: tmi.jail:<i>time</i>"
       //scatter: "",
       //scorecommandsandstuff: ""
     };
     this.disruptiveCommands = {
+      broadcast: "<b>Disruptive.</b> Broadcasts a <i>message</i>. USAGE: tmi.broadcast:<i>message</i>",
+      fetch: "<b>Disruptive.</b> Teleports a specified <i>player</i> to the brick. USAGE: tmi.fetch:<i>player</i>",
+      jail: "<b>Disruptive.</b> Prevents the interactor from moving for some <i>time</i> in seconds. USAGE: tmi.jail:<i>time</i>",
       killother: "<b>Disruptive.</b> Kills a specified <i>player</i>. USAGE: tmi.killother:<i>player</i>",
       killall: "<b>Disruptive.</b> Kills all players. USAGE: tmi.killall",
       hurtall: "<b>Disruptive.</b> Hurts all players for an <i>amount</i>. USAGE: tmi.hurtall:<i>amount</i>",
