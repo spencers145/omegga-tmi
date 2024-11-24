@@ -53,7 +53,8 @@
         "togglerole",
         "togglerolewithcolor",
         "kick",
-        "teleport"
+        "tp",
+        "relativetp"
       ],
       "default": []
     },
@@ -84,7 +85,8 @@
         "togglerole",
         "togglerolewithcolor",
         "kick",
-        "teleport"
+        "tp",
+        "relativetp"
       ],
       "default": []
     },
@@ -115,7 +117,8 @@
         "togglerole",
         "togglerolewithcolor",
         "kick",
-        "teleport"
+        "tp",
+        "relativetp"
       ],
       "default": []
     },

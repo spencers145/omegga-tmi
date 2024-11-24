@@ -39,7 +39,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       giveitem: "Gives a <i>weapon</i> some amount of <i>times</i>. USAGE: tmi.giveitem:<i>weapon</i>,<i>times</i>",
       takeitem: "Remove a <i>weapon</i> some amount of <i>times</i>. USAGE: tmi.takeitem:<i>weapon</i>,<i>times</i>",
       goto: "Teleports the interactor to a specified <i>player</i>. USAGE: tmi.goto:<i>player</i>",
-      teleport: "Teleports the interactor to position <i>x</i> <i>y</i> <i>z</i>. USAGE: tmi.teleport:<i>x</i>,<i>y</i>,<i>z</i>"
+      tp: "Teleports the interactor to position <i>x</i> <i>y</i> <i>z</i>. USAGE: tmi.tp:<i>x</i>,<i>y</i>,<i>z</i>",
+      relativetp: "Teleports the interactor from their position, offset by <i>x</i> <i>y</i> <i>z</i>. USAGE: tmi.relativetp:<i>x</i>,<i>y</i>,<i>z</i>"
       //scatter: "",
       //scorecommandsandstuff: ""
     };
@@ -295,8 +296,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           // valid TMI command?
           if (!Object.keys(this.commands).includes(commandArray[0]) && !Object.keys(this.disruptiveCommands).includes(commandArray[0])) {
             if (RegExp("/^\w+$/").test(commandArray[0])) {
-            // if not, throw
-            throw `<b>${commandArray[0]}</b> is not a valid command.`;
+              // if not, throw
+              throw `<b>${commandArray[0]}</b> is not a valid command.`;
             } else {
               throw `Invalid command.`;
             }
@@ -345,9 +346,14 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               this.omegga.whisper(interaction.player.name, "<i>UNLUCKY!</i>");
             }
             break;
-          case "teleport":
+          case "tp":
             this.ensureGoodInput(commandArray, ["number", "number", "number"], 3);
             this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" ${commandArray[1]} ${commandArray[2]} ${commandArray[3]} 0`);
+            break;
+          case "relativetp":
+            this.ensureGoodInput(commandArray, ["number", "number", "number"], 3);
+            const position = thisPlayer.getPosition()
+            this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" ${position[0] + commandArray[1]} ${position[1] + commandArray[2]} ${position[2] + commandArray[3]} 0`);
             break;
           case "unexist":
             this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 9999999999 999999999 999999999 0`);
