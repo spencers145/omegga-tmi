@@ -39,7 +39,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       giveitem: "Gives a <i>weapon</i> some amount of <i>times</i>. USAGE: tmi.giveitem:<i>weapon</i>,<i>times</i>",
       takeitem: "Remove a <i>weapon</i> some amount of <i>times</i>. USAGE: tmi.takeitem:<i>weapon</i>,<i>times</i>",
       goto: "Teleports the interactor to a specified <i>player</i>. USAGE: tmi.goto:<i>player</i>",
-      teleport: "Teleports the interactor to position <i>time</i> in seconds. USAGE: tmi.jail:<i>time</i>"
+      teleport: "Teleports the interactor to position <i>x</i> <i>y</i> <i>z</i>. USAGE: tmi.teleport:<i>x</i>,<i>y</i>,<i>z</i>"
       //scatter: "",
       //scorecommandsandstuff: ""
     };
@@ -339,6 +339,11 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`);
               this.omegga.whisper(interaction.player.name, "<i>UNLUCKY!</i>");
             }
+            break;
+          case "tp":
+          case "teleport":
+            this.ensureGoodInput(commandArray, ["number", "number", "number"], 3);
+            this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" ${commandArray[0]} ${commandArray[1]} ${commandArray[2]} 0`);
             break;
           case "unexist":
             this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 9999999999 999999999 999999999 0`);

@@ -21,7 +21,7 @@
       "default": ["Admin"]
     },
     "tmi-restricted-authorized": {
-      "description": "A list of roles that are authorized to use all TMI interact commands.",
+      "description": "A list of roles that are authorized to use ALL enabled commands.",
       "type": "list",
       "itemType": "role",
       "default": ["Admin"]
@@ -51,8 +51,9 @@
         "grantrole",
         "revokerole",
         "togglerole",
-"togglerolewithcolor",
-        "kick"
+        "togglerolewithcolor",
+        "kick",
+        "teleport"
       ],
       "default": []
     },
@@ -81,8 +82,9 @@
         "grantrole",
         "revokerole",
         "togglerole",
-"togglerolewithcolor",
-        "kick"
+        "togglerolewithcolor",
+        "kick",
+        "teleport"
       ],
       "default": []
     },
@@ -111,8 +113,9 @@
         "grantrole",
         "revokerole",
         "togglerole",
-"togglerolewithcolor",
-        "kick"
+        "togglerolewithcolor",
+        "kick",
+        "teleport"
       ],
       "default": []
     },
