@@ -341,10 +341,10 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               this.omegga.whisper(interaction.player.name, "<i>UNLUCKY!</i>");
             }
             break;
-          case "tp":
           case "teleport":
             this.ensureGoodInput(commandArray, ["number", "number", "number"], 3);
             this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" ${commandArray[0]} ${commandArray[1]} ${commandArray[2]} 0`);
+            this.omegga.whisper(interaction.player.name, `/TP "${interaction.player.name}" ${commandArray[0]} ${commandArray[1]} ${commandArray[2]} 0`)
             break;
           case "unexist":
             this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 9999999999 999999999 999999999 0`);
