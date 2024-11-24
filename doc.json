@@ -51,6 +51,7 @@
         "grantrole",
         "revokerole",
         "togglerole",
+"togglerolewithcolor",
         "kick"
       ],
       "default": []
@@ -80,6 +81,7 @@
         "grantrole",
         "revokerole",
         "togglerole",
+"togglerolewithcolor",
         "kick"
       ],
       "default": []
@@ -109,6 +111,7 @@
         "grantrole",
         "revokerole",
         "togglerole",
+"togglerolewithcolor",
         "kick"
       ],
       "default": []
