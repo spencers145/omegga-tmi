@@ -179,6 +179,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.weapons.forEach((weapon) => {
       if (!match && weapon.toLowerCase().includes(argument)) {
         gottenWeapon = weapon;
+        match = true;
       }
     });
     return !match ? "" : "Weapon_" + gottenWeapon;
