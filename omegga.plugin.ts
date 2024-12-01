@@ -18,6 +18,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
   roleLastGiven: Record<PlayerID, number>;
   commands: Record<string, string>;
   disruptiveCommands: Record<string, string>;
+  customCommands: Record<string, string>;
   weapons: Array<Weapon>;
 
   debounceNames: Record<PlayerID, PlayerInteraction>;
@@ -58,6 +59,9 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       togglerole: "<b>Disruptive.</b> Grants <i>role</i> to the interactor, or revokes <i>role</i> from the interactor if they have it. USAGE: tmi.togglerole:<i>role</i>",
       colorrole: "<b>Disruptive.</b> Grants a <i>role</i>, then grants or revokes a <i>color</i>. USAGE: tmi.colorrole:<i>role</i>,<i>color</i>",
       kick: "<b>Disruptive.</b> Kicks the interactor for a <i>reason</i>. USAGE: tmi.kick:<i>reason</i>"
+    };
+    this.customCommands = {
+      "custom:credits": "Toggles the credits flying role and teleports."
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -221,7 +225,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     let isHost;
     let ignoresRestrictions;
     let hasBasicAuthorization;
-    
+
     if (interact) {
       const owner = await this.getOwnerOfInteractedBrick(interact);
       if (typeof owner === "string") return owner;
@@ -304,7 +308,11 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           this.debounceAddName(interaction.player);
 
           // valid TMI command?
-          if (!Object.keys(this.commands).includes(commandArray[0]) && !Object.keys(this.disruptiveCommands).includes(commandArray[0])) {
+          if (
+            !Object.keys(this.commands).includes(commandArray[0])
+            && !Object.keys(this.disruptiveCommands).includes(commandArray[0])
+            && !Object.keys(this.customCommands.includes[commandArray[0]])
+          ) {
             if (RegExp("/^\w+$/").test(commandArray[0])) {
               // if not, throw
               throw `<b>${commandArray[0]}</b> is not a valid command.`;
@@ -529,6 +537,18 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             if (commandArray.length > 1) reason = commandArray[1];
             this.omegga.writeln(`Chat.Command /KICK "${interaction.player.name}" "${reason}"`);
             break;
+          case "custom:credits":
+            //tp base4 -2529 -13661 1385 0
+            if (thisPlayer.getRoles().includes("Credits Warper")) {
+            	this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Credits Warper"}" "${interaction.player.name}"`);
+              this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -2529 -13661 1385 0`)
+            } else {
+              if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
+                this.roleLastGiven[interaction.player.name] = Date.now();
+                this.omegga.writeln(`Chat.Command /GRANTROLE "${"Credits Warper"}" "${interaction.player.name}"`);
+                this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -2589 -13661 1385 0`)
+              }
+            }
           }
         } catch (error) {
           if (error) this.omegga.whisper(interaction.player.name, error);
