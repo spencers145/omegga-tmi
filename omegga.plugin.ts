@@ -353,7 +353,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           case "relativetp":
             this.ensureGoodInput(commandArray, ["number", "number", "number"], 3);
             const position = await thisPlayer.getPosition()
-            this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" ${position[0] + commandArray[1]} ${position[1] + commandArray[2]} ${position[2] + commandArray[3]} 0`);
+            this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" ${position[0] + Number(commandArray[1])} ${position[1] + Number(commandArray[2])} ${position[2] + Number(commandArray[3])} 0`);
             break;
           case "unexist":
             this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 9999999999 999999999 999999999 0`);
