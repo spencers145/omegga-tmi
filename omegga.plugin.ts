@@ -206,12 +206,22 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       return `You do not have permission to use the command <b>${command}</b>.`;
     }
 
+    if (
+      !this.config['tmi-secure-commands'].includes(command)
+      && !this.config['tmi-restricted-commands'].includes(command)
+      && this.config['tmi-disable-authorization']
+    ) {
+      // an exception for if the command is not restricted or secure, and authorization is disabled
+      // do not even check anything, just return true
+      return true
+    }
+
     let name;
     let hasClearance;
     let isHost;
     let ignoresRestrictions;
     let hasBasicAuthorization;
-
+    
     if (interact) {
       const owner = await this.getOwnerOfInteractedBrick(interact);
       if (typeof owner === "string") return owner;
