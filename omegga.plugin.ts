@@ -61,7 +61,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       kick: "<b>Disruptive.</b> Kicks the interactor for a <i>reason</i>. USAGE: tmi.kick:<i>reason</i>"
     };
     this.customCommands = {
-      "custom:credits": "Toggles the credits flying role and teleports."
+      "custom:credits": "Toggles the credits flying role and teleports.",
+      "custom:spawn": "Revokes the flying role and teleports.",
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -537,6 +538,10 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             if (commandArray.length > 1) reason = commandArray[1];
             this.omegga.writeln(`Chat.Command /KICK "${interaction.player.name}" "${reason}"`);
             break;
+          case "custom:spawn":
+            //tp base4 -1455 -14175 545 0
+            this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Credits Warper"}" "${interaction.player.name}"`);
+            this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -1455 -14175 545 0`)
           case "custom:credits":
             //tp base4 -2529 -13661 1385 0
             if (thisPlayer.getRoles().includes("Credits Warper")) {
