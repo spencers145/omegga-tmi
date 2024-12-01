@@ -567,7 +567,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "electrocute":
                 this.omegga.writeln(`Server.Players.Damage "${interaction.player.name}" 50`);
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Safety First" "${interaction.player.name}"`);
-                if (thisPlayer.getRoles().includes(commandArray[2])) {
+                if (thisPlayer.getRoles().includes("Electric Yellow")) {
                   this.omegga.writeln(`Chat.Command /REVOKEROLE "Electric Yellow" "${interaction.player.name}"`);	
                 } else {
                   if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
