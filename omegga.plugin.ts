@@ -56,7 +56,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       grantrole: "<b>Disruptive.</b> Grants <i>role</i> to the interactor. USAGE: tmi.grantrole:<i>role</i>",
       revokerole: "<b>Disruptive.</b> Revokes <i>role</i> from the interactor. USAGE: tmi.revokerole:<i>role</i>",
       togglerole: "<b>Disruptive.</b> Grants <i>role</i> to the interactor, or revokes <i>role</i> from the interactor if they have it. USAGE: tmi.togglerole:<i>role</i>",
-      togglerolewithcolor: "<b>Disruptive.</b> Grants a <i>role</i>, then grants or revokes a <i>color</i>. USAGE: tmi.togglerolewithcolor:<i>role</i>,<i>color</i>",
+      colorrole: "<b>Disruptive.</b> Grants a <i>role</i>, then grants or revokes a <i>color</i>. USAGE: tmi.colorrole:<i>role</i>,<i>color</i>",
       kick: "<b>Disruptive.</b> Kicks the interactor for a <i>reason</i>. USAGE: tmi.kick:<i>reason</i>"
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
@@ -501,7 +501,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               }
             }
             break;
-          case "togglerolewithcolor":
+          case "colorrole":
             this.ensureGoodInput(commandArray, ["role", "role"], 2);
             this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[1]}" "${interaction.player.name}"`);
             if (thisPlayer.getRoles().includes(commandArray[2])) {
