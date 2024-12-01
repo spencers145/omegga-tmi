@@ -54,7 +54,8 @@
         "colorrole",
         "kick",
         "tp",
-        "relativetp"
+        "relativetp",
+        "custom"
       ],
       "default": []
     },
@@ -86,7 +87,8 @@
         "colorrole",
         "kick",
         "tp",
-        "relativetp"
+        "relativetp",
+        "custom"
       ],
       "default": []
     },
@@ -118,7 +120,8 @@
         "colorrole",
         "kick",
         "tp",
-        "relativetp"
+        "relativetp",
+        "custom"
       ],
       "default": []
     },
