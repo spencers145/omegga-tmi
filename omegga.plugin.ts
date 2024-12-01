@@ -285,6 +285,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         break;
       case "role":
         if (!this.omegga.getRoleSetup().roles.some((value) => value.name === input)) throw `ERROR: Argument #${index} needs to be a role, but instead, it's ${input || "nothing"}.`
+        break;
       case "customCommand":
         if (!Object.keys(this.customCommands).includes(input)) throw `ERROR: Argument #${index} needs to be a custom command, but instead, it's ${input || "nothing"}.`
       }
