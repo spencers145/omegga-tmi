@@ -549,7 +549,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "spawn":
                 //tp base4 -1455 -14175 545 0
                 this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Credits Warper"}" "${interaction.player.name}"`);
-                this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -1455 -14175 545 0`)
+                this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -1080 -13889 537 0`)
                 break;
               case "credits":
                 //tp base4 -2529 -13661 1385 0
