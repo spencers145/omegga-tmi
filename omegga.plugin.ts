@@ -66,6 +66,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "spawn": "Revokes the flying role and teleports.",
       "electrocute": "Hurts and grants a role.",
       "miningtp": "TP for Unlimited Mining easter egg.",
+      "lottoblock": "Runs Lotto Block easter egg logic.",
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -545,7 +546,6 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             break;
           case "custom":
             this.ensureGoodInput(commandArray, ["customCommand"], 1);
-
             switch (commandArray[1]) {
               case "spawn":
                 //tp base4 -1455 -14175 545 0
@@ -588,6 +588,29 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                     this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -570.5 29961 2505 0`)
                   }
                 }
+              case "lottoblock":
+                const playerRoles = thisPlayer.getRoles()
+                if (playerRoles.includes("I CAN'T STOP WINNING")) {
+                  if (playerRoles.includes("Lucky Green")) {
+                    this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Lucky Green"}" "${interaction.player.name}"`);
+                  } else {
+                    this.omegga.writeln(`Chat.Command /GRANTROLE "${"Lucky Green"}" "${interaction.player.name}"`);
+                  }
+                } else if (!playerRoles.includes("Let's Go Gambling!")) {
+                  this.omegga.writeln(`Chat.Command /GRANTROLE "${"Let's Go Gambling!"}" "${interaction.player.name}"`);
+                } else {
+                  if (random < 0.02) {
+                    this.omegga.writeln(`Chat.Command /GRANTROLE "${"Lucky Green"}" "${interaction.player.name}"`);
+                    this.omegga.writeln(`Chat.Command /GRANTROLE "${"I CAN'T STOP WINNING"}" "${interaction.player.name}"`);
+                  } else if (random > 0.90) {
+                    this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`);
+                    this.omegga.whisper(interaction.player.name, "Too bad, you lost!")
+                    this.omegga.writeln(`Chat.Command /GRANTROLE "${"aw dangit"}" "${interaction.player.name}"`);
+                  } else {
+                    this.omegga.whisper(interaction.player.name, "Nothing happened!")
+                  }
+                }
+                
             }
           }
         } catch (error) {
