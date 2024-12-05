@@ -291,7 +291,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         if (!this.omegga.getRoleSetup().roles.some((value) => value.name === input)) throw `ERROR: Argument #${index} needs to be a role, but instead, it's ${input || "nothing"}.`
         break;
       case "color":
-        if (!this.config["tmi-color-roles"].some((value) => value.name === input)) throw `ERROR: Argument #${index} needs to be a color, but instead, it's ${input || "nothing"}.`
+        if (!this.config["tmi-color-roles"].includes(input)) throw `ERROR: Argument #${index} needs to be a color, but instead, it's ${input || "nothing"}.`
         break;
       case "customCommand":
         if (!Object.keys(this.customCommands).includes(input)) throw `ERROR: Argument #${index} needs to be a custom command, but instead, it's ${input || "nothing"}.`
