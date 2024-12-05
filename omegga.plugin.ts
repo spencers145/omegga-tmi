@@ -42,7 +42,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       goto: "Teleports the interactor to a specified <i>player</i>. USAGE: tmi.goto:<i>player</i>",
       tp: "Teleports the interactor to position <i>x</i> <i>y</i> <i>z</i>. USAGE: tmi.tp:<i>x</i>,<i>y</i>,<i>z</i>",
       relativetp: "Teleports the interactor from their position, offset by <i>x</i> <i>y</i> <i>z</i>. USAGE: tmi.relativetp:<i>x</i>,<i>y</i>,<i>z</i>",
-      swapcolor: "Grants a <i>color</i> role to the player, or swaps it with their previous choice. USAGE: tmi.swapcolor:<i>color</i>"
+      swapcolor: "Grants a <i>color</i> role to the player, or swaps it with their previous choice. USAGE: tmi.swapcolor:<i>color</i>",
+      givecolor: "Adds a <i>color</i> to the interactor's inventory. USAGE: tmi.givecolor:<i>color</i>"
       //scatter: "",
       //scorecommandsandstuff: ""
     };
@@ -58,7 +59,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       grantrole: "<b>Disruptive.</b> Grants <i>role</i> to the interactor. USAGE: tmi.grantrole:<i>role</i>",
       revokerole: "<b>Disruptive.</b> Revokes <i>role</i> from the interactor. USAGE: tmi.revokerole:<i>role</i>",
       togglerole: "<b>Disruptive.</b> Grants <i>role</i> to the interactor, or revokes <i>role</i> from the interactor if they have it. USAGE: tmi.togglerole:<i>role</i>",
-      achieve: "<b>Disruptive.</b> Grants a <i>role</i>, then swaps a <i>color</i>. USAGE: tmi.colorrole:<i>role</i>,<i>color</i>",
+      achieve: "<b>Disruptive.</b> Grants a <i>role</i>, then adds a <i>color</i> to the interactor's inventory. USAGE: tmi.achieve:<i>role</i>,<i>color</i>",
       kick: "<b>Disruptive.</b> Kicks the interactor for a <i>reason</i>. USAGE: tmi.kick:<i>reason</i>",
       custom: "<b>Disruptive.</b> Runs custom code not related to normal TMI functioning. Not intended for public use. Only enable if you know what you're doing.",
     };
@@ -299,6 +300,28 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     });
   }
 
+  async addColorToInventory(targetRole: string, player: OmeggaPlayer) {
+    const storeKey = "colorInventory." + player.id;
+    if (!(await this.store.keys()).includes(storeKey)) {
+      await this.store.set(storeKey, [])
+    }
+    const inventory = await this.store.get(storeKey) as Array<string>
+
+    if (!inventory.includes(targetRole)) {
+      inventory.push(targetRole)
+      inventory.sort()
+
+      await this.store.set(storeKey, inventory)
+
+      const targetColor = this.omegga.getRoleSetup().roles.find((role) => role.name === targetColor).color
+
+      this.omegga.whisper(player.name, `You just unlocked a new name color:
+        <color="#${targetColor.r.toString(16)}${targetColor.g.toString(16)}${targetColor.b.toString(16)}>${targetRole}
+      `)
+      this.omegga.whisper(player.name, "Use <b>/tmicolor</> to equip it!")
+    }
+  }
+
   async swapColors(targetColor: string, player: OmeggaPlayer, timer: number) {
     if ((player.name in this.roleLastGiven) && Date.now() <= this.roleLastGiven[player.name] + timer) {
       this.omegga.whisper(player.name, `You're on cooldown for ${((this.roleLastGiven[player.name] + timer - Date.now())/1000).toFixed(1)}s.`)
@@ -307,11 +330,11 @@ export default class basesCoolPlugin implements OmeggaPlugin {
 
     this.roleLastGiven[player.name] = Date.now();
 
-    const storeKey = "lastColorGiven." + player.id;
-    if (!(await this.store.keys()).includes(storeKey)) {
-      await this.store.set(storeKey, "")
-    }
-    const lastColor = await this.store.get(storeKey)
+    //const storeKey = "lastColorGiven." + player.id;
+    //if (!(await this.store.keys()).includes(storeKey)) {
+    //  await this.store.set(storeKey, "")
+    //}
+    //const lastColor = await this.store.get(storeKey)
 
     const roles = player.getRoles()
     const colorRoles = []
@@ -324,15 +347,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
 
     if (roles.includes(targetColor)) {
       this.omegga.writeln(`Chat.Command /REVOKEROLE "${targetColor}" "${player.name}"`)
-      this.omegga.writeln(`Chat.Command /GRANTROLE "${lastColor}" "${player.name}"`)
-      await this.store.set(storeKey, targetColor)
     } else {
       this.omegga.writeln(`Chat.Command /GRANTROLE "${targetColor}" "${player.name}"`)
-
-      const firstNonTargetColorRole = colorRoles.find((role) => role !== targetColor)
-      if (firstNonTargetColorRole !== undefined) {
-        await this.store.set(storeKey, firstNonTargetColorRole)
-      }
     }
   }
 
@@ -572,11 +588,15 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           case "achieve":
             this.ensureGoodInput(commandArray, ["role", "color"], 2);
             this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[1]}" "${interaction.player.name}"`);
-            await this.swapColors(commandArray[2], thisPlayer, 5000)
+            await this.addColorToInventory(commandArray[2], thisPlayer)
             break;
           case "swapcolor":
             this.ensureGoodInput(commandArray, ["color"], 1);
             await this.swapColors(commandArray[1], thisPlayer, 5000)
+            break;
+          case "givecolor":
+            this.ensureGoodInput(commandArray, ["color"], 1)
+            await this.addColorToInventory(commandArray[1], thisPlayer)
             break;
           case "kick":
             this.ensureGoodInput(commandArray, ["string"], 0);
@@ -608,7 +628,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "electrocute":
                 this.omegga.writeln(`Server.Players.Damage "${interaction.player.name}" 50`);
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Safety First" "${interaction.player.name}"`);
-                await this.swapColors("Electric Yellow", thisPlayer, 0)
+                await this.addColorToInventory("Electric Yellow", thisPlayer)
                 break;
               case "miningtp":
                 this.omegga.writeln(`Chat.Command /GRANTROLE "${"Jets Playertype"}" "${interaction.player.name}"`);
@@ -617,19 +637,20 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "lottoblock":
                 const playerRoles = thisPlayer.getRoles()
                 if (playerRoles.includes("I CAN'T STOP WINNING")) {
-                  await this.swapColors("Lucky Green", thisPlayer, 5000)
+                  // do nothing
                 } else if (!playerRoles.includes("Let's Go Gambling!")) {
                   this.omegga.writeln(`Chat.Command /GRANTROLE "${"Let's Go Gambling!"}" "${interaction.player.name}"`);
+                  this.omegga.whisper(interaction.player.name, "You didn't win anything. Click again?")
                 } else {
                   if (random < 0.02) {
-                    this.omegga.writeln(`Chat.Command /GRANTROLE "${"Lucky Green"}" "${interaction.player.name}"`);
+                    await this.addColorToInventory("Lucky Green", thisPlayer)
                     this.omegga.writeln(`Chat.Command /GRANTROLE "${"I CAN'T STOP WINNING"}" "${interaction.player.name}"`);
                   } else if (random > 0.90) {
                     this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`);
                     this.omegga.whisper(interaction.player.name, "TOO BAD! You lost!")
                     this.omegga.writeln(`Chat.Command /GRANTROLE "${"aw dangit"}" "${interaction.player.name}"`);
                   } else {
-                    this.omegga.whisper(interaction.player.name, "Nothing happened...try again?")
+                    this.omegga.whisper(interaction.player.name, "You didn't win anything. Click again?")
                   }
                 }
                 break;
@@ -668,8 +689,44 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       this.omegga.whisper(player, "Edit the interact. Click Advanced. Write your command in the Print to Console textbox.");
     });
 
+    this.omegga.on("cmd:tmicolor", async (player, chosenColor) => {
+      const storeKey = "colorInventory." + this.omegga.getPlayer(player).id;
+      if (!(await this.store.keys()).includes(storeKey)) {
+        await this.store.set(storeKey, [])
+      }
+      const inventory = await this.store.get(storeKey) as Array<string>
+
+      if (!chosenColor) {
+        const roles = this.omegga.getRoleSetup().roles
+
+        if (inventory.length === 0) {
+          this.omegga.whisper(player, "You don't own any colors.")
+        } else {
+          this.omegga.whisper(player, "Colors you own:")
+          inventory.forEach((colorName) => {
+            const color = roles.find((role) => role.name === colorName).color
+            this.omegga.whisper(player,
+              `<color="#${color.r.toString(16)}${color.g.toString(16)}${color.b.toString(16)}>${colorName}`
+            )
+          })
+          this.omegga.whisper(player, `Type /tmicolor "name of color" to set your color!`)
+        }
+      } else {
+        if (this.config["tmi-color-roles"].includes(chosenColor)) {
+          if (inventory.includes(chosenColor)) {
+            await this.swapColors(chosenColor, this.omegga.getPlayer(player), 10000)
+          } else {
+            this.omegga.whisper(player, "You don't own that color.")
+          }
+        } else {
+          this.omegga.whisper(player, "That's not a color.")
+        }
+      }
+    })
+
     registeredCommands.push('tmilist');
     registeredCommands.push('tmihelp');
+    registeredCommands.push('tmicolor');
     return {
       registeredCommands
     };

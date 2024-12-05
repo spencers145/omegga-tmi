@@ -142,13 +142,21 @@
   },
   "commands": [
     {
-      "name": "/tmi",
-      "description": "Too Many Interacts main command. Lists all interact types.",
+      "name": "/tmicolor",
+      "description": "Lists all your owned colors.",
       "args": [{
-        "name": "help",
-        "description": "Explains how to put special interacts on bricks.",
+        "name": "color",
+        "description": "Lets you set a color from your inventory.",
         "required": false
       }]
+    },
+    {
+      "name": "/tmilist",
+      "description": "Lists all interact types."
+    },
+    {
+      "name": "/tmihelp",
+      "description": "Explains how to put special interacts on bricks."
     }
   ]
 }
