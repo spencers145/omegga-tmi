@@ -696,14 +696,14 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       this.omegga.whisper(player, "Edit the interact. Click Advanced. Write your command in the Print to Console textbox.");
     });
 
-    this.omegga.on("cmd:tmicolor", async (player, chosenColor, ...args) => {
+    this.omegga.on("cmd:tmicolor", async (player, colorSearchTerm, ...args) => {
       const storeKey = "colorInventory." + this.omegga.getPlayer(player).id;
       if (!(await this.store.keys()).includes(storeKey)) {
         await this.store.set(storeKey, [])
       }
       const inventory = await this.store.get(storeKey) as Array<string>
 
-      if (!chosenColor) {
+      if (!colorSearchTerm) {
         const roles = this.omegga.getRoleSetup().roles
 
         if (inventory.length === 0) {
@@ -719,7 +719,11 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           this.omegga.whisper(player, `Type /tmicolor "name of color" to set your color!`)
         }
       } else {
-        args.forEach((word) => chosenColor = chosenColor + " " + word)
+        args.forEach((word) => colorSearchTerm = colorSearchTerm + " " + word)
+        colorSearchTerm = colorSearchTerm.toLowerCase()
+
+        const chosenColor = this.config["tmi-color-roles"].find((role) => role.toLowerCase().includes(colorSearchTerm))
+
         if (this.config["tmi-color-roles"].includes(chosenColor)) {
           if (inventory.includes(chosenColor)) {
             await this.swapColors(chosenColor, this.omegga.getPlayer(player), 10000)
