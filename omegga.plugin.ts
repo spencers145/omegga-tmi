@@ -300,35 +300,38 @@ export default class basesCoolPlugin implements OmeggaPlugin {
   }
 
   async swapColors(targetColor: string, player: OmeggaPlayer, timer: number) {
-    if (!(player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[player.name] + timer) {
-      this.roleLastGiven[player.name] = Date.now();
+    if ((player.name in this.roleLastGiven) && Date.now() <= this.roleLastGiven[player.name] + timer) {
+      this.omegga.whisper(player.name, "You're on cooldown.")
+      return
+    }
 
-      const storeKey = "lastColorGiven." + player.id;
-      if (!(await this.store.keys()).includes(storeKey)) {
-        await this.store.set(storeKey, "")
+    this.roleLastGiven[player.name] = Date.now();
+
+    const storeKey = "lastColorGiven." + player.id;
+    if (!(await this.store.keys()).includes(storeKey)) {
+      await this.store.set(storeKey, "")
+    }
+    const lastColor = await this.store.get(storeKey)
+
+    const roles = player.getRoles()
+    const colorRoles = []
+    roles.forEach((role) => this.config["tmi-color-roles"].includes(role) ? colorRoles.push(role) : {})
+    colorRoles.forEach((role) => {
+      if (role !== targetColor) {
+        this.omegga.writeln(`Chat.Command /REVOKEROLE "${role}" "${player.name}"`)
       }
-      const lastColor = await this.store.get(storeKey)
+    })
 
-      const roles = player.getRoles()
-      const colorRoles = []
-      roles.forEach((role) => this.config["tmi-color-roles"].includes(role) ? colorRoles.push(role) : {})
-      colorRoles.forEach((role) => {
-        if (role !== targetColor) {
-          this.omegga.writeln(`Chat.Command /REVOKEROLE "${player.name}" "${role}"`)
-        }
-      })
+    if (roles.includes(targetColor)) {
+      this.omegga.writeln(`Chat.Command /REVOKEROLE "${targetColor}" "${player.name}"`)
+      this.omegga.writeln(`Chat.Command /GRANTROLE "${lastColor}" "${player.name}"`)
+      await this.store.set(storeKey, targetColor)
+    } else {
+      this.omegga.writeln(`Chat.Command /GRANTROLE "${targetColor}" "${player.name}"`)
 
-      if (roles.includes(targetColor)) {
-        this.omegga.writeln(`Chat.Command /REVOKEROLE "${player.name}" "${targetColor}"`)
-        this.omegga.writeln(`Chat.Command /GRANTROLE "${player.name}" "${lastColor}"`)
-        await this.store.set(storeKey, targetColor)
-      } else {
-        this.omegga.writeln(`Chat.Command /GRANTROLE "${player.name}" "${targetColor}"`)
-
-        const firstNonTargetColorRole = colorRoles.find((role) => role !== targetColor)
-        if (firstNonTargetColorRole !== undefined) {
-          await this.store.set(storeKey, firstNonTargetColorRole)
-        }
+      const firstNonTargetColorRole = colorRoles.find((role) => role !== targetColor)
+      if (firstNonTargetColorRole !== undefined) {
+        await this.store.set(storeKey, firstNonTargetColorRole)
       }
     }
   }
@@ -561,17 +564,19 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
                 this.roleLastGiven[interaction.player.name] = Date.now();
                 this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[1]}" "${interaction.player.name}"`);
+              } else {
+                this.omegga.whisper(interaction.player.name, "You're on cooldown.")
               }
             }
             break;
           case "achieve":
             this.ensureGoodInput(commandArray, ["role", "color"], 2);
             this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[1]}" "${interaction.player.name}"`);
-            await this.swapColors(commandArray[2], thisPlayer, 10000)
+            await this.swapColors(commandArray[2], thisPlayer, 5000)
             break;
           case "swapcolor":
             this.ensureGoodInput(commandArray, ["color"], 1);
-            await this.swapColors(commandArray[1], thisPlayer, 10000)
+            await this.swapColors(commandArray[1], thisPlayer, 5000)
             break;
           case "kick":
             this.ensureGoodInput(commandArray, ["string"], 0);
