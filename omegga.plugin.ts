@@ -703,6 +703,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       }
       const inventory = await this.store.get(storeKey) as Array<string>
 
+      this.omegga.whisper(player, `${chosenColor}`)
+
       if (!chosenColor) {
         const roles = this.omegga.getRoleSetup().roles
 
