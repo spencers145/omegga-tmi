@@ -719,6 +719,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           this.omegga.whisper(player, `Type /tmicolor "name of color" to set your color!`)
         }
       } else {
+        chosenColor = chosenColor.replace("\"", "")
         if (this.config["tmi-color-roles"].includes(chosenColor)) {
           if (inventory.includes(chosenColor)) {
             await this.swapColors(chosenColor, this.omegga.getPlayer(player), 10000)
