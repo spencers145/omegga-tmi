@@ -301,7 +301,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
 
   async swapColors(targetColor: string, player: OmeggaPlayer, timer: number) {
     if ((player.name in this.roleLastGiven) && Date.now() <= this.roleLastGiven[player.name] + timer) {
-      this.omegga.whisper(player.name, `You're on cooldown for ${(this.roleLastGiven[player.name] + timer - Date.now()).toFixed(1)}s.`)
+      this.omegga.whisper(player.name, `You're on cooldown for ${((this.roleLastGiven[player.name] + timer - Date.now())/1000).toFixed(1)}s.`)
       return
     }
 
@@ -565,7 +565,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 this.roleLastGiven[interaction.player.name] = Date.now();
                 this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[1]}" "${interaction.player.name}"`);
               } else {
-                this.omegga.whisper(interaction.player.name, `You're on cooldown for ${(this.roleLastGiven[interaction.player.name] + 10_000 - Date.now()).toFixed(1)}s.`)
+                this.omegga.whisper(interaction.player.name, `You're on cooldown for ${((this.roleLastGiven[interaction.player.name] + 10_000 - Date.now())/1000).toFixed(1)}s.`)
               }
             }
             break;
