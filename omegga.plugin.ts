@@ -295,6 +295,40 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     });
   }
 
+  async swapColors(targetColor: string, player: OmeggaPlayer, timer: number) {
+    if (!(player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[player.name] + timer) {
+      this.roleLastGiven[player.name] = Date.now();
+
+      const storeKey = "lastColorGiven." + player.id;
+      if (!(await this.store.keys()).includes(storeKey)) {
+        await this.store.set(storeKey, "")
+      }
+      const lastColor = await this.store.get(storeKey)
+
+      const roles = player.getRoles()
+      const colorRoles = []
+      roles.forEach((role) => this.config["tmi-color-roles"].includes(role) ? colorRoles.push(role) : {})
+      colorRoles.forEach((role) => {
+        if (role !== targetColor) {
+          this.omegga.writeln(`Chat.Command /REVOKEROLE "${player.name}" "${role}"`)
+        }
+      })
+
+      if (roles.includes(targetColor)) {
+        this.omegga.writeln(`Chat.Command /REVOKEROLE "${player.name}" "${targetColor}"`)
+        this.omegga.writeln(`Chat.Command /GRANTROLE "${player.name}" "${lastColor}"`)
+        await this.store.set(storeKey, targetColor)
+      } else {
+        this.omegga.writeln(`Chat.Command /GRANTROLE "${player.name}" "${targetColor}"`)
+
+        const firstNonTargetColorRole = colorRoles.find((role) => role !== targetColor)
+        if (firstNonTargetColorRole !== undefined) {
+          await this.store.set(storeKey, firstNonTargetColorRole)
+        }
+      }
+    }
+  }
+
   async init() {
     const registeredCommands = [];
     this.omegga.on('interact', async (interaction) => {
@@ -529,14 +563,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           case "colorrole":
             this.ensureGoodInput(commandArray, ["role", "role"], 2);
             this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[1]}" "${interaction.player.name}"`);
-            if (thisPlayer.getRoles().includes(commandArray[2])) {
-              this.omegga.writeln(`Chat.Command /REVOKEROLE "${commandArray[2]}" "${interaction.player.name}"`);	
-            } else {
-              if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
-                this.roleLastGiven[interaction.player.name] = Date.now();
-                this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[2]}" "${interaction.player.name}"`);
-              }
-            }
+            await this.swapColors(commandArray[2], thisPlayer, 10000)
             break;
           case "kick":
             this.ensureGoodInput(commandArray, ["string"], 0);
@@ -568,30 +595,16 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "electrocute":
                 this.omegga.writeln(`Server.Players.Damage "${interaction.player.name}" 50`);
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Safety First" "${interaction.player.name}"`);
-                if (thisPlayer.getRoles().includes("Electric Yellow")) {
-                  this.omegga.writeln(`Chat.Command /REVOKEROLE "Electric Yellow" "${interaction.player.name}"`);	
-                } else {
-                  if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
-                    this.roleLastGiven[interaction.player.name] = Date.now();
-                    this.omegga.writeln(`Chat.Command /GRANTROLE "Electric Yellow" "${interaction.player.name}"`);
-                  }
-                }
+                await this.swapColors("Electric Yellow", thisPlayer, 500)
                 break;
               case "miningtp":
-                if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
-                  this.roleLastGiven[interaction.player.name] = Date.now();
-                  this.omegga.writeln(`Chat.Command /GRANTROLE "${"Jets Playertype"}" "${interaction.player.name}"`);
-                  this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -570.5 29961 2505 0`)
-                }
+                this.omegga.writeln(`Chat.Command /GRANTROLE "${"Jets Playertype"}" "${interaction.player.name}"`);
+                this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -570.5 29961 2505 0`)
                 break;
               case "lottoblock":
                 const playerRoles = thisPlayer.getRoles()
                 if (playerRoles.includes("I CAN'T STOP WINNING")) {
-                  if (playerRoles.includes("Lucky Green")) {
-                    this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Lucky Green"}" "${interaction.player.name}"`);
-                  } else {
-                    this.omegga.writeln(`Chat.Command /GRANTROLE "${"Lucky Green"}" "${interaction.player.name}"`);
-                  }
+                  await this.swapColors("Lucky Green", thisPlayer, 10000)
                 } else if (!playerRoles.includes("Let's Go Gambling!")) {
                   this.omegga.writeln(`Chat.Command /GRANTROLE "${"Let's Go Gambling!"}" "${interaction.player.name}"`);
                 } else {
@@ -600,10 +613,10 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                     this.omegga.writeln(`Chat.Command /GRANTROLE "${"I CAN'T STOP WINNING"}" "${interaction.player.name}"`);
                   } else if (random > 0.90) {
                     this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`);
-                    this.omegga.whisper(interaction.player.name, "Too bad, you lost!")
+                    this.omegga.whisper(interaction.player.name, "TOO BAD! You lost!")
                     this.omegga.writeln(`Chat.Command /GRANTROLE "${"aw dangit"}" "${interaction.player.name}"`);
                   } else {
-                    this.omegga.whisper(interaction.player.name, "Nothing happened!")
+                    this.omegga.whisper(interaction.player.name, "Nothing happened...try again?")
                   }
                 }
                 break;

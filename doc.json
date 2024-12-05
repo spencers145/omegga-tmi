@@ -129,6 +129,12 @@
       "description": "Whether to enable disruptive commands that can be used maliciously: killall, hurtall, kick, kicklottery, ownerlottery, grantrole, removerole, broadcast.",
       "type": "boolean",
       "default": false
+    },
+    "tmi-color-roles": {
+      "description": "A list of roles that are considered colors, and will be swapped by the colorrole command.",
+      "type": "list",
+      "itemType": "role",
+      "default": []
     }
   },
   "commands": [
