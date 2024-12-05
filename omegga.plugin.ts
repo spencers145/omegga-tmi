@@ -316,7 +316,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       const targetColor = this.omegga.getRoleSetup().roles.find((role) => role.name === targetRole).color
 
       this.omegga.whisper(player.name, `You just unlocked a new name color:
-        <color="#${targetColor.r.toString(16)}${targetColor.g.toString(16)}${targetColor.b.toString(16)}>${targetRole}
+        <b><color="#${targetColor.r.toString(16)}${targetColor.g.toString(16)}${targetColor.b.toString(16)}>${targetRole}</></>
       `);
       this.omegga.whisper(player.name, "Use <b>/tmicolor</> to equip it!")
     }
@@ -706,10 +706,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           inventory.forEach((colorName) => {
             const color = roles.find((role) => role.name === colorName).color
             this.omegga.whisper(player,
-              `#${color.r.toString(16)}${color.g.toString(16)}${color.b.toString(16)}`
-            )
-            this.omegga.whisper(player,
-              `<color="#${color.r.toString(16)}${color.g.toString(16)}${color.b.toString(16)}>${colorName}`
+              `<b><color="#${color.r.toString(16)}${color.g.toString(16)}${color.b.toString(16)}>${colorName}</></>`
             )
           })
           this.omegga.whisper(player, `Type /tmicolor "name of color" to set your color!`)
