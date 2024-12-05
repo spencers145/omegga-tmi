@@ -548,18 +548,18 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             switch (commandArray[1]) {
               case "spawn":
                 //tp base4 -1455 -14175 545 0
-                this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Credits Warper"}" "${interaction.player.name}"`);
+                this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Jets"}" "${interaction.player.name}"`);
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -1080 -13889 537 0`)
                 break;
               case "credits":
                 //tp base4 -2529 -13661 1385 0
-                if (thisPlayer.getRoles().includes("Credits Warper")) {
-                  this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Credits Warper"}" "${interaction.player.name}"`);
+                if (thisPlayer.getRoles().includes("Jets")) {
+                  this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Jets"}" "${interaction.player.name}"`);
                   this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -2529 -13661 1385 0`)
                 } else {
                   if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
                     this.roleLastGiven[interaction.player.name] = Date.now();
-                    this.omegga.writeln(`Chat.Command /GRANTROLE "${"Credits Warper"}" "${interaction.player.name}"`);
+                    this.omegga.writeln(`Chat.Command /GRANTROLE "${"Jets"}" "${interaction.player.name}"`);
                     this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -2589 -13661 1385 0`)
                   }
                 }
@@ -576,6 +576,17 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                   }
                 }
                 break;
+              case "miningtp":
+                if (thisPlayer.getRoles().includes("Jets")) {
+                  this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Jets"}" "${interaction.player.name}"`);
+                  this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 38, -55, 37`)
+                } else {
+                  if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
+                    this.roleLastGiven[interaction.player.name] = Date.now();
+                    this.omegga.writeln(`Chat.Command /GRANTROLE "${"Jets"}" "${interaction.player.name}"`);
+                    this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -570.5 29961 2505 0`)
+                  }
+                }
             }
           }
         } catch (error) {
