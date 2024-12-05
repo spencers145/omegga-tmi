@@ -313,10 +313,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
 
       await this.store.set(storeKey, inventory)
 
-      this.omegga.whisper(player.name, `test`)
-      this.omegga.whisper(player.name, `${this.omegga.getRoleSetup()}`)
-      const targetColor = this.omegga.getRoleSetup().roles.find((role) => role.name === targetColor).color
-      this.omegga.whisper(player.name, `test`)
+      const targetColor = this.omegga.getRoleSetup().roles.find((role) => role.name === targetRole).color
 
       this.omegga.whisper(player.name, `You just unlocked a new name color:
         <color="#${targetColor.r.toString(16)}${targetColor.g.toString(16)}${targetColor.b.toString(16)}>${targetRole}
@@ -708,6 +705,9 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           this.omegga.whisper(player, "Colors you own:")
           inventory.forEach((colorName) => {
             const color = roles.find((role) => role.name === colorName).color
+            this.omegga.whisper(player,
+              `#${color.r.toString(16)}${color.g.toString(16)}${color.b.toString(16)}`
+            )
             this.omegga.whisper(player,
               `<color="#${color.r.toString(16)}${color.g.toString(16)}${color.b.toString(16)}>${colorName}`
             )
