@@ -588,6 +588,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                     this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -570.5 29961 2505 0`)
                   }
                 }
+                break;
               case "lottoblock":
                 const playerRoles = thisPlayer.getRoles()
                 if (playerRoles.includes("I CAN'T STOP WINNING")) {
@@ -610,7 +611,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                     this.omegga.whisper(interaction.player.name, "Nothing happened!")
                   }
                 }
-                
+                break;
             }
           }
         } catch (error) {
