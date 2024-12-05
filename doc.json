@@ -51,10 +51,11 @@
         "grantrole",
         "revokerole",
         "togglerole",
-        "colorrole",
+        "achieve",
         "kick",
         "tp",
         "relativetp",
+        "swapcolor",
         "custom"
       ],
       "default": []
@@ -84,10 +85,11 @@
         "grantrole",
         "revokerole",
         "togglerole",
-        "colorrole",
+        "achieve",
         "kick",
         "tp",
         "relativetp",
+        "swapcolor",
         "custom"
       ],
       "default": []
@@ -117,10 +119,11 @@
         "grantrole",
         "revokerole",
         "togglerole",
-        "colorrole",
+        "achieve",
         "kick",
         "tp",
         "relativetp",
+        "swapcolor",
         "custom"
       ],
       "default": []
@@ -131,7 +134,7 @@
       "default": false
     },
     "tmi-color-roles": {
-      "description": "A list of roles that are considered colors, and will be swapped by the colorrole command.",
+      "description": "A list of roles that are considered colors, and will be swapped by the swapcolor and achieve commands.",
       "type": "list",
       "itemType": "role",
       "default": []

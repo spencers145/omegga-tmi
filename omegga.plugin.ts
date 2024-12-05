@@ -41,7 +41,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       takeitem: "Remove a <i>weapon</i> some amount of <i>times</i>. USAGE: tmi.takeitem:<i>weapon</i>,<i>times</i>",
       goto: "Teleports the interactor to a specified <i>player</i>. USAGE: tmi.goto:<i>player</i>",
       tp: "Teleports the interactor to position <i>x</i> <i>y</i> <i>z</i>. USAGE: tmi.tp:<i>x</i>,<i>y</i>,<i>z</i>",
-      relativetp: "Teleports the interactor from their position, offset by <i>x</i> <i>y</i> <i>z</i>. USAGE: tmi.relativetp:<i>x</i>,<i>y</i>,<i>z</i>"
+      relativetp: "Teleports the interactor from their position, offset by <i>x</i> <i>y</i> <i>z</i>. USAGE: tmi.relativetp:<i>x</i>,<i>y</i>,<i>z</i>",
+      swapcolor: "Grants a <i>color</i> role to the player, or swaps it with their previous choice. USAGE: tmi.swapcolor:<i>color</i>"
       //scatter: "",
       //scorecommandsandstuff: ""
     };
@@ -57,7 +58,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       grantrole: "<b>Disruptive.</b> Grants <i>role</i> to the interactor. USAGE: tmi.grantrole:<i>role</i>",
       revokerole: "<b>Disruptive.</b> Revokes <i>role</i> from the interactor. USAGE: tmi.revokerole:<i>role</i>",
       togglerole: "<b>Disruptive.</b> Grants <i>role</i> to the interactor, or revokes <i>role</i> from the interactor if they have it. USAGE: tmi.togglerole:<i>role</i>",
-      colorrole: "<b>Disruptive.</b> Grants a <i>role</i>, then grants or revokes a <i>color</i>. USAGE: tmi.colorrole:<i>role</i>,<i>color</i>",
+      achieve: "<b>Disruptive.</b> Grants a <i>role</i>, then swaps a <i>color</i>. USAGE: tmi.colorrole:<i>role</i>,<i>color</i>",
       kick: "<b>Disruptive.</b> Kicks the interactor for a <i>reason</i>. USAGE: tmi.kick:<i>reason</i>",
       custom: "<b>Disruptive.</b> Runs custom code not related to normal TMI functioning. Not intended for public use. Only enable if you know what you're doing.",
     };
@@ -288,6 +289,9 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         break;
       case "role":
         if (!this.omegga.getRoleSetup().roles.some((value) => value.name === input)) throw `ERROR: Argument #${index} needs to be a role, but instead, it's ${input || "nothing"}.`
+        break;
+      case "color":
+        if (!this.config["tmi-color-roles"].some((value) => value.name === input)) throw `ERROR: Argument #${index} needs to be a color, but instead, it's ${input || "nothing"}.`
         break;
       case "customCommand":
         if (!Object.keys(this.customCommands).includes(input)) throw `ERROR: Argument #${index} needs to be a custom command, but instead, it's ${input || "nothing"}.`
@@ -560,10 +564,14 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               }
             }
             break;
-          case "colorrole":
-            this.ensureGoodInput(commandArray, ["role", "role"], 2);
+          case "achieve":
+            this.ensureGoodInput(commandArray, ["role", "color"], 2);
             this.omegga.writeln(`Chat.Command /GRANTROLE "${commandArray[1]}" "${interaction.player.name}"`);
             await this.swapColors(commandArray[2], thisPlayer, 10000)
+            break;
+          case "swapcolor":
+            this.ensureGoodInput(commandArray, ["color"], 1);
+            await this.swapColors(commandArray[1], thisPlayer, 10000)
             break;
           case "kick":
             this.ensureGoodInput(commandArray, ["string"], 0);
