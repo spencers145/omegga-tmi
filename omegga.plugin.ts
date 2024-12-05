@@ -313,11 +313,14 @@ export default class basesCoolPlugin implements OmeggaPlugin {
 
       await this.store.set(storeKey, inventory)
 
+      this.omegga.whisper(player.name, `test`)
+      this.omegga.whisper(player.name, `${this.omegga.getRoleSetup()}`)
       const targetColor = this.omegga.getRoleSetup().roles.find((role) => role.name === targetColor).color
+      this.omegga.whisper(player.name, `test`)
 
       this.omegga.whisper(player.name, `You just unlocked a new name color:
         <color="#${targetColor.r.toString(16)}${targetColor.g.toString(16)}${targetColor.b.toString(16)}>${targetRole}
-      `)
+      `);
       this.omegga.whisper(player.name, "Use <b>/tmicolor</> to equip it!")
     }
   }
