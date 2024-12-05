@@ -1,4 +1,4 @@
-import { OmeggaPlugin, OL, PC, PS, OmeggaPlayer, BrickInteraction } from "omegga/dist";
+import { OmeggaPlugin, OL, PC, PS, OmeggaPlayer, BrickInteraction, BRColor } from "omegga/dist";
 
 type Weapon = string;
 type PlayerID = string;
@@ -300,6 +300,13 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     });
   }
 
+  getHexFromColorObject(colorObject: BRColor) {
+    const red = (colorObject.r < 16 ? "0" : "") + colorObject.r.toString(16)
+    const green = (colorObject.g < 16 ? "0" : "") + colorObject.g.toString(16)
+    const blue = (colorObject.b < 16 ? "0" : "") + colorObject.b.toString(16)
+    return red + green + blue
+  }
+
   async addColorToInventory(targetRole: string, player: OmeggaPlayer) {
     const storeKey = "colorInventory." + player.id;
     if (!(await this.store.keys()).includes(storeKey)) {
@@ -316,7 +323,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       const targetColor = this.omegga.getRoleSetup().roles.find((role) => role.name === targetRole).color
 
       this.omegga.whisper(player.name, `You just unlocked a new name color:
-        <b><color="#${targetColor.r.toString(16)}${targetColor.g.toString(16)}${targetColor.b.toString(16)}">${targetRole}</></>
+        <b><color="#${this.getHexFromColorObject(targetColor)}">${targetRole}</></>
       `);
       this.omegga.whisper(player.name, "Use <b>/tmicolor</> to equip it!")
     }
@@ -706,7 +713,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           inventory.forEach((colorName) => {
             const color = roles.find((role) => role.name === colorName).color
             this.omegga.whisper(player,
-              `<b><color="#${color.r.toString(16)}${color.g.toString(16)}${color.b.toString(16)}">${colorName}</></>`
+              `<b><color="#${this.getHexFromColorObject(color)}">${colorName}</></>`
             )
           })
           this.omegga.whisper(player, `Type /tmicolor "name of color" to set your color!`)
