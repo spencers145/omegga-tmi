@@ -580,7 +580,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "miningtp":
                 if (thisPlayer.getRoles().includes("Jets Playertype")) {
                   this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Jets Playertype"}" "${interaction.player.name}"`);
-                  this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 38 -55 37`)
+                  this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 38 -55 37 0`)
                 } else {
                   if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
                     this.roleLastGiven[interaction.player.name] = Date.now();
