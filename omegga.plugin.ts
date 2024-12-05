@@ -706,7 +706,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           inventory.forEach((colorName) => {
             const color = roles.find((role) => role.name === colorName).color
             this.omegga.whisper(player,
-              `<b><color="#${color.r.toString(16)}${color.g.toString(16)}${color.b.toString(16)}>${colorName}</></>`
+              `<color="#${color.r.toString(16)}${color.g.toString(16)}${color.b.toString(16)}><b>${colorName}</></>`
             )
           })
           this.omegga.whisper(player, `Type /tmicolor "name of color" to set your color!`)
