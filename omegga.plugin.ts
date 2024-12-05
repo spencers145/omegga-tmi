@@ -608,7 +608,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "electrocute":
                 this.omegga.writeln(`Server.Players.Damage "${interaction.player.name}" 50`);
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Safety First" "${interaction.player.name}"`);
-                await this.swapColors("Electric Yellow", thisPlayer, 500)
+                await this.swapColors("Electric Yellow", thisPlayer, 0)
                 break;
               case "miningtp":
                 this.omegga.writeln(`Chat.Command /GRANTROLE "${"Jets Playertype"}" "${interaction.player.name}"`);
@@ -617,7 +617,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "lottoblock":
                 const playerRoles = thisPlayer.getRoles()
                 if (playerRoles.includes("I CAN'T STOP WINNING")) {
-                  await this.swapColors("Lucky Green", thisPlayer, 10000)
+                  await this.swapColors("Lucky Green", thisPlayer, 5000)
                 } else if (!playerRoles.includes("Let's Go Gambling!")) {
                   this.omegga.writeln(`Chat.Command /GRANTROLE "${"Let's Go Gambling!"}" "${interaction.player.name}"`);
                 } else {
