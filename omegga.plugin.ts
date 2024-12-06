@@ -239,13 +239,13 @@ export default class basesCoolPlugin implements OmeggaPlugin {
 
       name = owner.name;
       isHost = Omegga.getHostId() === owner.id;
-      hasBasicAuthorization = Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-authorized']).includes(role)) || this.config['tmi-authorized'].length === 0;
+      hasBasicAuthorization = this.config['tmi-disable-authorization'] || Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-authorized']).includes(role)) || this.config['tmi-authorized'].length === 0;
       hasClearance = Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-secure-authorized']).includes(role));
       ignoresRestrictions = Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-restricted-authorized']).includes(role));
     } else {
       name = player.name;
       isHost = player.isHost();
-      hasBasicAuthorization = player.getRoles().some((role) => (this.config['tmi-authorized']).includes(role)) || this.config['tmi-authorized'].length === 0;
+      hasBasicAuthorization = this.config['tmi-disable-authorization'] || player.getRoles().some((role) => (this.config['tmi-authorized']).includes(role)) || this.config['tmi-authorized'].length === 0;
       hasClearance = player.getRoles().some((role) => (this.config['tmi-secure-authorized']).includes(role));
       ignoresRestrictions = player.getRoles().some((role) => (this.config['tmi-restricted-authorized']).includes(role));
     }
