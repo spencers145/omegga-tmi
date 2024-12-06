@@ -269,7 +269,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         ownerHasBasicAuthorization
       ))
 
-    if (ownerCanPutThisCommandOnBricks) {
+    if (!ownerCanPutThisCommandOnBricks) {
       return `<b>${name}</b> does not have permission to have bricks with the command <b>${command}</b>.`;
     }
 
