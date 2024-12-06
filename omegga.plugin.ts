@@ -761,16 +761,20 @@ export default class basesCoolPlugin implements OmeggaPlugin {
 
     // this command is purposefully omitted from the config.
     this.omegga.on("command:eggs", async (player, subcommand) => {
-      const eggsFound = []
-      const thisPlayer = this.omegga.getPlayer(player)
-      const playerRoles = thisPlayer.getRoles()
-      this.eggs.forEach((egg) => {playerRoles.includes(egg) ? eggsFound.push(egg) : "do nothing"})
-      
-      this.omegga.whisper(player, `You've gotten <b>${eggsFound.length}/${this.eggs.length}</> achievements this year.`)
-      if (eggsFound.length == this.eggs.length && !playerRoles.includes("Permajets")) {
-        this.omegga.whisper(player, "Congratulations! Here's your prize.")
-        this.omegga.writeln(`/GRANTROLE "${player}" Permajets`)
-        this.omegga.broadcast(`${player} just got every achievement this year and has earned FLIGHT permissions!`)
+      try {
+        const eggsFound = []
+        const thisPlayer = this.omegga.getPlayer(player)
+        const playerRoles = thisPlayer.getRoles()
+        this.eggs.forEach((egg) => {playerRoles.includes(egg) ? eggsFound.push(egg) : "do nothing"})
+        
+        this.omegga.whisper(player, `You've gotten <b>${eggsFound.length}/${this.eggs.length}</> achievements this year.`)
+        if (eggsFound.length == this.eggs.length && !playerRoles.includes("Permajets")) {
+          this.omegga.whisper(player, "Congratulations! Here's your prize.")
+          this.omegga.writeln(`/GRANTROLE "${player}" Permajets`)
+          this.omegga.broadcast(`${player} just got every achievement this year and has earned FLIGHT permissions!`)
+        }
+      } catch (error) {
+        if (error) this.omegga.whisper(player, error);
       }
     })
 
