@@ -176,10 +176,6 @@
     {
       "name": "/tmihelp",
       "description": "Explains how to put special interacts on bricks."
-    },
-    {
-      "name": "/eggs",
-      "description": "a."
     }
   ]
 }
