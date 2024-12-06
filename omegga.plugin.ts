@@ -250,6 +250,9 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       ignoresRestrictions = player.getRoles().some((role) => (this.config['tmi-restricted-authorized']).includes(role));
     }
 
+    this.omegga.whisper("base4", (this.config['tmi-secure-commands'].includes(command) && !hasClearance).toString())
+    this.omegga.whisper("base4", (this.config['tmi-restricted-commands'].includes(command) && !ignoresRestrictions).toString())
+
     if (
       !isHost &&
       ((
