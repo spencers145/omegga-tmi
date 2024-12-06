@@ -760,8 +760,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     })
 
     // this command is purposefully omitted from the config.
-    this.omegga.on("command:eggs", async (player) => {
-      this.omegga.whisper("base4", "i'm running code!")
+    this.omegga.on("cmd:eggs", async (player) => {
       try {
         const eggsFound = []
         const thisPlayer = this.omegga.getPlayer(player)
