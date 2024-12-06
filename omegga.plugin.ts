@@ -198,6 +198,10 @@ export default class basesCoolPlugin implements OmeggaPlugin {
   }
 
   async checkRestrictions(command, player: OmeggaPlayer, interact) {
+    const commandIsSecure = this.config['tmi-secure-commands'].includes(command)
+    const commandIsRestricted = this.config['tmi-restricted-commands'].includes(command)
+    const authorizationEnabled = !this.config['tmi-disable-authorization']
+
     if (!this.config['tmi-disruptive-commands'] && Object.keys(this.disruptiveCommands).includes(command)) {
       return `Disruptive commands such as <b>${command}</b> have been disabled.`;
     }
@@ -206,59 +210,66 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       return `The command <b>${command}</b> has been disabled.`;
     }
 
-    /*if (
-      !player.isHost() &&
-      !player.getRoles().some((role) => (this.config['tmi-restricted-authorized']).includes(role)) &&
-      (
-        this.config['tmi-restricted-commands'].includes(command) ||
-        (!player.getRoles().some((role) => (this.config['tmi-authorized']).includes(role) || this.config['tmi-authorized'].length === 0))
-      )
-    ) {
-      return `You do not have permission to use the command <b>${command}</b>.`;
-    }*/
-
+    // an exception for if we already know this command is usable by anybody
+    // do not even check anything, just return true
+    // (this allows us to skip finding the brick, so that freely-authorized commands can be used on strangely-shaped bricks)
+    // this is particularly useful for commands like tp, hurt, and relativetp.
     if (
-      !this.config['tmi-secure-commands'].includes(command)
-      && !this.config['tmi-restricted-commands'].includes(command)
-      && this.config['tmi-disable-authorization']
+      !commandIsSecure && !commandIsRestricted && !authorizationEnabled
     ) {
-      // an exception for if the command is not restricted or secure, and authorization is disabled
-      // do not even check anything, just return true
       return true
     }
 
+    const interactorIsHost = player.isHost()
+    const interactorIgnoresRestrictions = player.getRoles().some((role) => (this.config['tmi-restricted-authorized']).includes(role))
+    const interactorHasBasicAuthorization = player.getRoles().some((role) => (this.config['tmi-authorized']).includes(role)) || !authorizationEnabled
+    
+    const interactorCanUseThisCommand =
+      interactorIsHost ||
+      interactorIgnoresRestrictions ||
+      (
+        !commandIsRestricted && interactorHasBasicAuthorization
+      )
+
+    if (!interactorCanUseThisCommand) {
+      return `You do not have permission to use the command <b>${command}</b>.`;
+    }
+
+    // check for the brick owner's permissions
     let name;
-    let hasClearance;
-    let isHost;
-    let ignoresRestrictions;
-    let hasBasicAuthorization;
+    let ownerHasClearance;
+    let ownerIsHost;
+    let ownerIgnoresRestrictions;
+    let ownerHasBasicAuthorization;
 
     if (interact) {
       const owner = await this.getOwnerOfInteractedBrick(interact);
       if (typeof owner === "string") return owner;
 
       name = owner.name;
-      isHost = Omegga.getHostId() === owner.id;
-      hasBasicAuthorization = this.config['tmi-disable-authorization'] || Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-authorized']).includes(role)) || this.config['tmi-authorized'].length === 0;
-      hasClearance = Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-secure-authorized']).includes(role));
-      ignoresRestrictions = Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-restricted-authorized']).includes(role));
+      ownerIsHost = Omegga.getHostId() === owner.id;
+      ownerHasBasicAuthorization = this.config['tmi-disable-authorization'] || Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-authorized']).includes(role)) || this.config['tmi-authorized'].length === 0;
+      ownerHasClearance = Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-secure-authorized']).includes(role));
+      ownerIgnoresRestrictions = Player.getRoles(this.omegga, owner.id).some((role) => (this.config['tmi-restricted-authorized']).includes(role));
     } else {
       name = player.name;
-      isHost = player.isHost();
-      hasBasicAuthorization = this.config['tmi-disable-authorization'] || player.getRoles().some((role) => (this.config['tmi-authorized']).includes(role)) || this.config['tmi-authorized'].length === 0;
-      hasClearance = player.getRoles().some((role) => (this.config['tmi-secure-authorized']).includes(role));
-      ignoresRestrictions = player.getRoles().some((role) => (this.config['tmi-restricted-authorized']).includes(role));
+      ownerIsHost = player.isHost();
+      ownerHasBasicAuthorization = this.config['tmi-disable-authorization'] || player.getRoles().some((role) => (this.config['tmi-authorized']).includes(role)) || this.config['tmi-authorized'].length === 0;
+      ownerHasClearance = player.getRoles().some((role) => (this.config['tmi-secure-authorized']).includes(role));
+      ownerIgnoresRestrictions = player.getRoles().some((role) => (this.config['tmi-restricted-authorized']).includes(role));
     }
 
-    if (
-      !isHost &&
+    const ownerCanPutThisCommandOnBricks =
+      ownerIsHost ||
       ((
-        this.config['tmi-secure-commands'].includes(command) && !hasClearance
-      ) || (
-        this.config['tmi-restricted-commands'].includes(command) && !ignoresRestrictions
-      ) || (
-        !hasBasicAuthorization
-      ))) {
+        !commandIsSecure || ownerHasClearance
+      ) && (
+        !commandIsRestricted || ownerIgnoresRestrictions
+      ) && (
+        ownerHasBasicAuthorization
+      ))
+
+    if (ownerCanPutThisCommandOnBricks) {
       return `<b>${name}</b> does not have permission to have bricks with the command <b>${command}</b>.`;
     }
 
