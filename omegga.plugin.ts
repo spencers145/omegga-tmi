@@ -412,12 +412,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             !Object.keys(this.commands).includes(commandArray[0])
             && !Object.keys(this.disruptiveCommands).includes(commandArray[0])
           ) {
-            if (RegExp("/^\w+$/").test(commandArray[0])) {
-              // if not, throw
-              throw `<b>${commandArray[0]}</b> is not a valid command.`;
-            } else {
-              throw `Invalid command.`;
-            }
+            throw `Invalid command.`;
           }
 
           const thisPlayer = this.omegga.getPlayer(interaction.player.name); // get this player
