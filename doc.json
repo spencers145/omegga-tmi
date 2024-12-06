@@ -21,7 +21,7 @@
       "default": ["Admin"]
     },
     "tmi-restricted-authorized": {
-      "description": "A list of roles that are authorized to use ALL enabled commands.",
+      "description": "A list of roles that are authorized to use ALL enabled commands. Stronger than regular authorization.",
       "type": "list",
       "itemType": "role",
       "default": ["Admin"]
@@ -130,6 +130,11 @@
     },
     "tmi-disruptive-commands": {
       "description": "Whether to enable disruptive commands that can be used maliciously: killall, hurtall, kick, kicklottery, ownerlottery, grantrole, removerole, broadcast.",
+      "type": "boolean",
+      "default": false
+    },
+    "tmi-new-years-functionality": {
+      "description": "Whether to enable the plugin's functionality for use with Brickadia New Years events.",
       "type": "boolean",
       "default": false
     },

@@ -25,6 +25,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
   playerCallbacks: Record<PlayerID, Record<string, number>>;
   playerIntervals: Record<PlayerID, Record<string, number>>;
 
+  eggs: Array<string>;
+
   constructor(omegga: OL, config: PC, store: PS) {
     this.omegga = omegga;
     this.config = config;
@@ -61,7 +63,6 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       togglerole: "<b>Disruptive.</b> Grants <i>role</i> to the interactor, or revokes <i>role</i> from the interactor if they have it. USAGE: tmi.togglerole:<i>role</i>",
       achieve: "<b>Disruptive.</b> Grants a <i>role</i>, then adds a <i>color</i> to the interactor's inventory. USAGE: tmi.achieve:<i>role</i>,<i>color</i>",
       kick: "<b>Disruptive.</b> Kicks the interactor for a <i>reason</i>. USAGE: tmi.kick:<i>reason</i>",
-      custom: "<b>Disruptive.</b> Runs custom code not related to normal TMI functioning. Not intended for public use. Only enable if you know what you're doing.",
     };
     this.customCommands = {
       "credits": "Toggles the credits flying role and teleports.",
@@ -74,6 +75,22 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.debounceNames = {};
     this.playerCallbacks = {};
     this.playerIntervals = {};
+
+    this.eggs = [
+      "aw dangit",
+      "Let's Go Gambling!",
+      "Epicness Get",
+      "Slate Appreciator",
+      "oops",
+      "Safety First",
+      "Vitamin AAAAA",
+      "Health Conscious",
+      "To Bee or not To Bee",
+      "Peter what are you-",
+      "Smoke Detector",
+      "I CAN'T STOP WINNING",
+      "Fire Escape"
+    ]
   }
 
   debounceAddName(player: PlayerInteraction) {
@@ -747,9 +764,30 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       }
     })
 
+    // this command is purposefully omitted from the config.
+    this.omegga.on("command:eggs", async (player, subcommand) => {
+      const eggsFound = []
+      const thisPlayer = this.omegga.getPlayer(player)
+      const playerRoles = thisPlayer.getRoles()
+      this.eggs.forEach((egg) => {playerRoles.includes(egg) ? eggsFound.push(egg) : "do nothing"})
+      
+      this.omegga.whisper(player, `You've gotten <b>${eggsFound.length}/${this.eggs.length}</> achievements this year.`)
+      if (eggsFound.length == this.eggs.length && !playerRoles.includes("Permajets")) {
+        this.omegga.whisper(player, "Congratulations! Here's your prize.")
+        this.omegga.writeln(`/GRANTROLE "${player}" Permajets`)
+        this.omegga.broadcast(`${player} just got every achievement this year and has earned FLIGHT permissions!`)
+      }
+    })
+
     registeredCommands.push('tmilist');
     registeredCommands.push('tmihelp');
     registeredCommands.push('tmicolor');
+
+    if (this.config["tmi-new-years-functionality"]) {
+      this.disruptiveCommands["custom"] = "<b>Disruptive.</b> Runs custom code not related to normal TMI functioning. Not intended for public use. Only use if you know what you're doing."
+      registeredCommands.push('eggs');
+    }
+
     return {
       registeredCommands
     };
