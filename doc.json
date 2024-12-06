@@ -56,9 +56,17 @@
         "tp",
         "relativetp",
         "swapcolor",
+        "givecolor",
         "custom"
       ],
-      "default": []
+      "default": [
+        "annoyhost",
+        "grantrole",
+        "revokerole",
+        "togglerole",
+        "achieve",
+        "kick"
+      ]
     },
     "tmi-restricted-commands": {
       "description": "A list of interact commands that are restricted.",
@@ -90,6 +98,7 @@
         "tp",
         "relativetp",
         "swapcolor",
+        "givecolor",
         "custom"
       ],
       "default": []
@@ -124,12 +133,17 @@
         "tp",
         "relativetp",
         "swapcolor",
+        "givecolor",
         "custom"
       ],
-      "default": []
+      "default": [
+        "killother",
+        "killall",
+        "hurtall"
+      ]
     },
     "tmi-disruptive-commands": {
-      "description": "Whether to enable disruptive commands that can be used maliciously: killall, hurtall, kick, kicklottery, ownerlottery, grantrole, removerole, broadcast.",
+      "description": "Whether to enable disruptive commands that can be used maliciously. For example: hurtall, kick, grantrole, broadcast...",
       "type": "boolean",
       "default": false
     },
