@@ -206,7 +206,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       return `The command <b>${command}</b> has been disabled.`;
     }
 
-    if (
+    /*if (
       !player.isHost() &&
       !player.getRoles().some((role) => (this.config['tmi-restricted-authorized']).includes(role)) &&
       (
@@ -215,7 +215,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       )
     ) {
       return `You do not have permission to use the command <b>${command}</b>.`;
-    }
+    }*/
 
     if (
       !this.config['tmi-secure-commands'].includes(command)
@@ -249,9 +249,6 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       hasClearance = player.getRoles().some((role) => (this.config['tmi-secure-authorized']).includes(role));
       ignoresRestrictions = player.getRoles().some((role) => (this.config['tmi-restricted-authorized']).includes(role));
     }
-
-    this.omegga.whisper("base4", (this.config['tmi-secure-commands'].includes(command) && !hasClearance).toString())
-    this.omegga.whisper("base4", (this.config['tmi-restricted-commands'].includes(command) && !ignoresRestrictions).toString())
 
     if (
       !isHost &&
