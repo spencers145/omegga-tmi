@@ -77,11 +77,14 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "Outliner User",
+      "Credits Warper",
+      "Buzz Off",
+      "Codebreaker",
       "aw dangit",
       "Let's Go Gambling!",
       "Epicness Get",
       "Slate Appreciator",
-      "oops",
       "Safety First",
       "Vitamin AAAAA",
       "Health Conscious",
@@ -639,18 +642,20 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             switch (commandArray[1]) {
               case "spawn":
                 //tp base4 -1455 -14175 545 0
-                this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Jets Playertype"}" "${interaction.player.name}"`);
+                this.omegga.writeln(`Chat.Command /REVOKEROLE "Jets Playertype" "${interaction.player.name}"`);
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -1080 -13889 537 0`)
                 break;
               case "credits":
                 //tp base4 -2529 -13661 1385 0
+                this.addColorToInventory("GG Green", thisPlayer)
+                this.omegga.writeln(`Chat.Command /GRANTROLE "Credits Warper" "${interaction.player.name}"`)
                 if (thisPlayer.getRoles().includes("Jets Playertype")) {
-                  this.omegga.writeln(`Chat.Command /REVOKEROLE "${"Jets Playertype"}" "${interaction.player.name}"`);
+                  this.omegga.writeln(`Chat.Command /REVOKEROLE "Jets Playertype" "${interaction.player.name}"`);
                   this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -2529 -13661 1385 0`)
                 } else {
                   if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
                     this.roleLastGiven[interaction.player.name] = Date.now();
-                    this.omegga.writeln(`Chat.Command /GRANTROLE "${"Jets Playertype"}" "${interaction.player.name}"`);
+                    this.omegga.writeln(`Chat.Command /GRANTROLE "Jets Playertype" "${interaction.player.name}"`);
                     this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -2589 -13661 1385 0`)
                   }
                 }
@@ -661,7 +666,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 await this.addColorToInventory("Electric Yellow", thisPlayer)
                 break;
               case "miningtp":
-                this.omegga.writeln(`Chat.Command /GRANTROLE "${"Jets Playertype"}" "${interaction.player.name}"`);
+                this.omegga.writeln(`Chat.Command /GRANTROLE "Jets Playertype" "${interaction.player.name}"`);
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -570.5 29961 2505 0`)
                 break;
               case "lottoblock":
@@ -745,7 +750,15 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         args.forEach((word) => colorSearchTerm = colorSearchTerm + " " + word)
         colorSearchTerm = colorSearchTerm.toLowerCase()
 
-        const chosenColor = this.config["tmi-color-roles"].find((role) => role.toLowerCase().includes(colorSearchTerm))
+
+        const chosenColor = inventory.find((role) => role.toLowerCase().includes(colorSearchTerm))
+
+        if (chosenColor === null) {
+          // no match
+          if (inventory.find((role) => role.toLowerCase().includes(colorSearchTerm)) === null) {
+            
+          }
+        }
 
         if (this.config["tmi-color-roles"].includes(chosenColor)) {
           if (inventory.includes(chosenColor)) {
