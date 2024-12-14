@@ -694,6 +694,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "beyondthefire":
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Beyond the Fire" "${interaction.player.name}"`);
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 2359 -14639 235 0`);
+                this.addColorToInventory("Wipeout Orange", thisPlayer);
             }
           }
         } catch (error) {
