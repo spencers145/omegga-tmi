@@ -77,6 +77,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "Beyond the Fire",
       "Outliner User",
       "Credits Warper",
       "Buzz Off",
@@ -689,6 +690,9 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                   }
                 }
                 break;
+              case "beyondthefire":
+                this.omegga.writeln(`Chat.Command /GRANTROLE "Beyond the Fire" "${interaction.player.name}"`);
+                this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 2359, -14639, 235`);
             }
           }
         } catch (error) {
