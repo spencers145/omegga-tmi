@@ -645,7 +645,11 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             switch (commandArray[1]) {
               case "spawn":
                 //tp base4 -1455 -14175 545 0
-                this.omegga.writeln(`Chat.Command /REVOKEROLE "Jets Playertype" "${interaction.player.name}"`);
+                if (thisPlayer.getRoles().includes("Jets Playertype")) {
+                  this.omegga.writeln(`Chat.Command /REVOKEROLE "Jets Playertype" "${interaction.player.name}"`);
+                  this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`);
+                  this.omegga.whisper(thisPlayer, "You can't take jets out of spawn.")
+                }
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -1080 -13889 537 0`)
                 break;
               case "credits":
