@@ -79,6 +79,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "Tree Topper",
       "Fibreglass for 4.99",
       "Loose Change",
       "Point Insertion",
