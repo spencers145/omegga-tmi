@@ -79,6 +79,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "Fibreglass for 4.99",
       "Loose Change",
       "Point Insertion",
       "Beyond the Fire",
