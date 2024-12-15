@@ -436,6 +436,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         this.omegga.whisper(player, "That doesn't seem right. You shake off the seasoning.")
       }
 
+      this.seasonings[player.id] = [];
       clearTimeout(this.playerCallbacks[player.id].seasoningTimer);
       delete this.playerCallbacks[player.id].seasoningTimer;
     }
