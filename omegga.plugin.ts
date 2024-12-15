@@ -71,6 +71,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "miningtp": "TP for Unlimited Mining easter egg.",
       "lottoblock": "Runs Lotto Block easter egg logic.",
       "beyondthefire": "Runs TP and role grant for beyond the fire easter egg.",
+      "outliner": "Determines if a player meets the requirements to get the outliner.",
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -449,6 +450,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
           }
 
           const random = Math.random();
+          const playerRoles = thisPlayer.getRoles()
 
           switch (commandArray[0]) {
           case "hurt":
@@ -611,7 +613,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             break;
   	      case "togglerole":
             this.ensureGoodInput(commandArray, ["role"], 1);
-            if (thisPlayer.getRoles().includes(commandArray[1])) {
+            if (playerRoles.includes(commandArray[1])) {
             	this.omegga.writeln(`Chat.Command /REVOKEROLE "${commandArray[1]}" "${interaction.player.name}"`);	
             } else {
               if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
@@ -646,7 +648,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             switch (commandArray[1]) {
               case "spawn":
                 //tp base4 -1455 -14175 545 0
-                if (thisPlayer.getRoles().includes("Jets Playertype")) {
+                if (playerRoles.includes("Jets Playertype")) {
                   this.omegga.writeln(`Chat.Command /REVOKEROLE "Jets Playertype" "${interaction.player.name}"`);
                   this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`);
                   this.omegga.whisper(thisPlayer, "You can't take jets out of spawn.")
@@ -657,7 +659,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 //tp base4 -2529 -13661 1385 0
                 this.addColorToInventory("GG Green", thisPlayer)
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Credits Warper" "${interaction.player.name}"`)
-                if (thisPlayer.getRoles().includes("Jets Playertype")) {
+                if (playerRoles.includes("Jets Playertype")) {
                   this.omegga.writeln(`Chat.Command /REVOKEROLE "Jets Playertype" "${interaction.player.name}"`);
                   this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -2529 -13661 1385 0`)
                 } else {
@@ -678,7 +680,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -570.5 29961 2505 0`)
                 break;
               case "lottoblock":
-                const playerRoles = thisPlayer.getRoles()
+                
                 if (playerRoles.includes("I CAN'T STOP WINNING")) {
                   // do nothing
                 } else if (!playerRoles.includes("Let's Go Gambling!")) {
@@ -701,6 +703,24 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Beyond the Fire" "${interaction.player.name}"`);
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 2359 -14639 235 0`);
                 this.addColorToInventory("Wipeout Orange", thisPlayer);
+              case "outliner":
+                if (playerRoles.includes("Fire Escape") && playerRoles.includes("Codebreaker") && playerRoles.includes("Credits Warper")) {
+                  if (!playerRoles.includes("Outliner User")) {
+                    this.omegga.writeln(`Chat.Command /GRANTROLE "Outliner User" "${interaction.player.name}"`)
+                  }
+                  this.omegga.whisper(thisPlayer, "You've unlocked the outliner. Use it wisely.")
+                } else {
+                  this.omegga.whisper(thisPlayer, "Sorry! You don't have all the achievements needed to get this one.")
+                  if (!playerRoles.includes("Fire Escape")) {
+                    this.omegga.whisper(thisPlayer, "You still need to <b>climb the chimney</>.")
+                  }
+                  if (!playerRoles.includes("Codebreaker")) {
+                    this.omegga.whisper(thisPlayer, "You still have the <b>crack the code on the computer</>.")
+                  }
+                  if (!playerRoles.includes("Credits Warper")) {
+                    this.omegga.whisper(thisPlayer, "You've still got to <b>find the credits room</>.")
+                  }
+                }
             }
           }
         } catch (error) {
