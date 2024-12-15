@@ -78,6 +78,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "Loose Change",
       "Point Insertion",
       "Beyond the Fire",
       "Outliner User",
