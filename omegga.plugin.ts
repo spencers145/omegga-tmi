@@ -25,6 +25,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
   playerCallbacks: Record<PlayerID, Record<string, number>>;
   playerIntervals: Record<PlayerID, Record<string, number>>;
 
+  seasonings: Record<PlayerID, Array<string>>;
+
   eggs: Array<string>;
 
   constructor(omegga: OL, config: PC, store: PS) {
@@ -72,6 +74,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "lottoblock": "Runs Lotto Block easter egg logic.",
       "beyondthefire": "Runs TP and role grant for beyond the fire easter egg.",
       "outliner": "Determines if a player meets the requirements to get the outliner.",
+      "seasoning": "Seasons player. Gives a special role if you get the right combo of 3.",
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -101,6 +104,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "I CAN'T STOP WINNING",
       "Fire Escape"
     ]
+
+    this.seasonings = {};
   }
 
   debounceAddName(player: PlayerInteraction) {
@@ -397,6 +402,39 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     }
   }
 
+  addSeasoningToPlayer(seasoning: string, player: OmeggaPlayer) {
+    if (!Object.keys(this.seasonings).includes(player.id)) {
+      this.seasonings[player.id] = [];
+    }
+    if (!Object.keys(this.playerCallbacks).includes(player.id)) {
+      this.playerCallbacks[player.id] = {};
+    }
+
+    this.seasonings[player.id].push(seasoning)
+    this.omegga.whisper(player, `You get a bit of ${seasoning} on you.`)
+
+    if (this.seasonings[player.id].length < 3) {
+      this.playerCallbacks[player.id].seasoningTimer = setTimeout(() => {
+        delete this.playerCallbacks[player.id].seasoningTimer;
+        this.seasonings[player.id] = [];
+        this.omegga.whisper(player, "Your seasonings fall off.")
+      }, 5000);
+    } else {
+      if (new Set(this.seasonings[player.id]) === new Set(["coriander", "cumin", "curry powder"])) {
+        this.omegga.writeln(`Chat.Command /GRANTROLE "Indian Spiced" "${player.name}"`)
+        this.addColorToInventory("Spicy Orange", player);
+      } else if (new Set(this.seasonings[player.id]) === new Set(["rosemary", "basil", "oregano"])) {
+        this.omegga.writeln(`Chat.Command /GRANTROLE "Italian Spiced" "${player.name}"`)
+        this.addColorToInventory("Pepper Gray", player);
+      } else {
+        this.omegga.whisper(player, "That doesn't seem right. You shake off the seasoning.")
+      }
+
+      clearTimeout(this.playerCallbacks[player.id].seasoningTimer);
+      delete this.playerCallbacks[player.id].seasoningTimer;
+    }
+  }
+
   async init() {
     const registeredCommands = [];
     this.omegga.on('interact', async (interaction) => {
@@ -673,7 +711,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 }
                 break;
               case "electrocute":
-                this.omegga.writeln(`Server.Players.Damage "${interaction.player.name}" 50`);
+                this.omegga.writeln(`Server.Players.Damage "${interaction.player.name}" 99999`);
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Safety First" "${interaction.player.name}"`);
                 await this.addColorToInventory("Electric Yellow", thisPlayer)
                 break;
@@ -682,7 +720,6 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -570.5 29961 2505 0`)
                 break;
               case "lottoblock":
-                
                 if (playerRoles.includes("I CAN'T STOP WINNING")) {
                   // do nothing
                 } else if (!playerRoles.includes("Let's Go Gambling!")) {
@@ -705,6 +742,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Beyond the Fire" "${interaction.player.name}"`);
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 2359 -14639 235 0`);
                 this.addColorToInventory("Wipeout Orange", thisPlayer);
+                break;
               case "outliner":
                 if (playerRoles.includes("Fire Escape") && playerRoles.includes("Codebreaker") && playerRoles.includes("Credits Warper")) {
                   if (!playerRoles.includes("Outliner User")) {
@@ -712,7 +750,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                   }
                   this.omegga.whisper(thisPlayer, "You've unlocked the outliner. Use it wisely.")
                 } else {
-                  this.omegga.whisper(thisPlayer, "Sorry! You don't have all the achievements needed to get this one...")
+                  this.omegga.whisper(thisPlayer, "Sorry! You don't have enough achievements yet...")
                   if (!playerRoles.includes("Fire Escape")) {
                     this.omegga.whisper(thisPlayer, `You still need to <color="#C93740"><b>climb the chimney</></>.`)
                   }
@@ -724,6 +762,10 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                   }
                   this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`);
                 }
+                break;
+              case "seasoning":
+                this.addSeasoningToPlayer(commandArray[2], thisPlayer);
+                break;
             }
           }
         } catch (error) {
