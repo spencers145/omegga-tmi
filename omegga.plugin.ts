@@ -75,6 +75,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "beyondthefire": "Runs TP and role grant for beyond the fire easter egg.",
       "outliner": "Determines if a player meets the requirements to get the outliner.",
       "seasoning": "Seasons player. Gives a special role if you get the right combo of 3.",
+      "softlock": "Softlock prevention, probably.",
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -82,6 +83,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "Softlock Prevention",
+      "(baking) SODA!!",
       "Indian Spiced",
       "Italian Seasoned",
       "Tree Topper",
@@ -772,6 +775,11 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 break;
               case "seasoning":
                 this.addSeasoningToPlayer(commandArray[2], thisPlayer);
+                break;
+              case "softlock":
+                this.addColorToInventory("Soft(lock) Purple", thisPlayer);
+                this.omegga.writeln(`Chat.Command /GRANTROLE "Softlock Prevention" "${interaction.player.name}"`);
+                this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`)
                 break;
             }
           }
