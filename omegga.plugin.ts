@@ -430,7 +430,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         this.omegga.writeln(`Chat.Command /GRANTROLE "Indian Spiced" "${player.name}"`)
         this.addColorToInventory("Spicy Orange", player);
       } else if (seasonings.includes("basil") && seasonings.includes("oregano") && seasonings.includes("rosemary")) {
-        this.omegga.writeln(`Chat.Command /GRANTROLE "Italian Spiced" "${player.name}"`)
+        this.omegga.writeln(`Chat.Command /GRANTROLE "Italian Seasoned" "${player.name}"`)
         this.addColorToInventory("Pepper Gray", player);
       } else {
         this.omegga.whisper(player, "That doesn't seem right. You shake off the seasoning.")
