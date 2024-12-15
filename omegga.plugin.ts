@@ -416,16 +416,20 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.omegga.whisper(player, `You get a bit of ${seasoning} on you.`)
 
     if (this.seasonings[player.id].length < 3) {
+      if (this.playerCallbacks[player.id].seasoningTimer) {
+        clearTimeout(this.playerCallbacks[player.id].seasoningTimer);
+      }
       this.playerCallbacks[player.id].seasoningTimer = setTimeout(() => {
         delete this.playerCallbacks[player.id].seasoningTimer;
         this.seasonings[player.id] = [];
         this.omegga.whisper(player, "Your seasonings fall off.")
       }, 5000);
     } else {
-      if (new Set(this.seasonings[player.id]) === new Set(["coriander", "cumin", "curry powder"])) {
+      const seasonings = this.seasonings[player.id]
+      if (seasonings.includes("coriander") && seasonings.includes("cumin") && seasonings.includes("curry powder")) {
         this.omegga.writeln(`Chat.Command /GRANTROLE "Indian Spiced" "${player.name}"`)
         this.addColorToInventory("Spicy Orange", player);
-      } else if (new Set(this.seasonings[player.id]) === new Set(["rosemary", "basil", "oregano"])) {
+      } else if (seasonings.includes("basil") && seasonings.includes("oregano") && seasonings.includes("rosemary")) {
         this.omegga.writeln(`Chat.Command /GRANTROLE "Italian Spiced" "${player.name}"`)
         this.addColorToInventory("Pepper Gray", player);
       } else {
