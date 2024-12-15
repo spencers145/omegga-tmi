@@ -82,6 +82,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "Indian Spiced",
+      "Italian Seasoned",
       "Tree Topper",
       "Fibreglass for 4.99",
       "Loose Change",
