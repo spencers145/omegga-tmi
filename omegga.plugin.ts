@@ -710,15 +710,15 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                   }
                   this.omegga.whisper(thisPlayer, "You've unlocked the outliner. Use it wisely.")
                 } else {
-                  this.omegga.whisper(thisPlayer, "Sorry! You don't have all the achievements needed to get this one.")
+                  this.omegga.whisper(thisPlayer, "Sorry! You don't have all the achievements needed to get this one...")
                   if (!playerRoles.includes("Fire Escape")) {
-                    this.omegga.whisper(thisPlayer, "You still need to <b>climb the chimney</>.")
+                    this.omegga.whisper(thisPlayer, `You still need to <color="#C93740"><b>climb the chimney</></>.`)
                   }
                   if (!playerRoles.includes("Codebreaker")) {
-                    this.omegga.whisper(thisPlayer, "You still have the <b>crack the code on the computer</>.")
+                    this.omegga.whisper(thisPlayer, `You still have the <color="#AFE8FF"><b>crack the code in the Blockland house</></>.`)
                   }
                   if (!playerRoles.includes("Credits Warper")) {
-                    this.omegga.whisper(thisPlayer, "You've still got to <b>find the credits room</>.")
+                    this.omegga.whisper(thisPlayer, `You've still got to <color="#A1D3B3"><b>find the credits room up in the cabinets</></>.`)
                   }
                 }
             }
