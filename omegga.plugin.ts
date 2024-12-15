@@ -720,6 +720,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                   if (!playerRoles.includes("Credits Warper")) {
                     this.omegga.whisper(thisPlayer, `You've still got to <color="#A1D3B3"><b>find the credits room up in the cabinets</></>.`)
                   }
+                  this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`);
                 }
             }
           }
