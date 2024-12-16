@@ -710,12 +710,12 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Credits Warper" "${interaction.player.name}"`)
                 if (playerRoles.includes("Jets Playertype")) {
                   this.omegga.writeln(`Chat.Command /REVOKEROLE "Jets Playertype" "${interaction.player.name}"`);
-                  this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -2529 -13661 1385 0`)
+                  this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 0 0 0 0`)
                 } else {
                   if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
                     this.roleLastGiven[interaction.player.name] = Date.now();
                     this.omegga.writeln(`Chat.Command /GRANTROLE "Jets Playertype" "${interaction.player.name}"`);
-                    this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -2589 -13661 1385 0`)
+                    this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -2852 -13783 1376 0`)
                   }
                 }
                 break;
