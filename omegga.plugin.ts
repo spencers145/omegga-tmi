@@ -709,7 +709,6 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 this.addColorToInventory("GG Green", thisPlayer)
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Credits Warper" "${interaction.player.name}"`)
                 if (playerRoles.includes("Jets Playertype")) {
-                  this.omegga.writeln(`Chat.Command /REVOKEROLE "Jets Playertype" "${interaction.player.name}"`);
                   this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 0 0 0 0`)
                 } else {
                   if (!(interaction.player.name in this.roleLastGiven) || Date.now() > this.roleLastGiven[interaction.player.name] + 10_000) {
