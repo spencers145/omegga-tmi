@@ -875,7 +875,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         if (eggsFound.length == this.eggs.length && !playerRoles.includes("Noclip")) {
           this.omegga.whisper(player, "Congratulations! Here's your prize.")
           this.omegga.writeln(`/GRANTROLE "${player}" Noclip`)
-          this.omegga.broadcast(`<b>${player} just got every achievement this year and has earned FLIGHT permissions! CONGRATULATIONS!</>`)
+          this.omegga.broadcast(`<b>${player} just got every achievement this year and has earned NOCLIP?! CONGRATULATIONS!</>`)
         }
       } catch (error) {
         if (error) this.omegga.whisper(player, error);
