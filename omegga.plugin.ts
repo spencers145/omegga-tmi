@@ -99,7 +99,6 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "aw dangit",
       "Let's Go Gambling!",
       "Epicness Get",
-      "Slate Appreciator",
       "Safety First",
       "Vitamin AAAAA",
       "Health Conscious",
