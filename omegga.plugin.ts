@@ -83,6 +83,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "3D-Thinking",
+      "Triple Dipper",
       "Softlock Prevention",
       "(baking) SODA!!",
       "Indian Spiced",
