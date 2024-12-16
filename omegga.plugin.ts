@@ -872,10 +872,10 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         this.eggs.forEach((egg) => {playerRoles.includes(egg) ? eggsFound.push(egg) : "do nothing"})
         
         this.omegga.whisper(player, `You've gotten <b>${eggsFound.length}/${this.eggs.length}</> achievements this year.`)
-        if (eggsFound.length == this.eggs.length && !playerRoles.includes("Permajets")) {
+        if (eggsFound.length == this.eggs.length && !playerRoles.includes("Noclip")) {
           this.omegga.whisper(player, "Congratulations! Here's your prize.")
-          this.omegga.writeln(`/GRANTROLE "${player}" Permajets`)
-          this.omegga.broadcast(`${player} just got every achievement this year and has earned FLIGHT permissions!`)
+          this.omegga.writeln(`/GRANTROLE "${player}" Noclip`)
+          this.omegga.broadcast(`<b>${player} just got every achievement this year and has earned FLIGHT permissions! CONGRATULATIONS!</>`)
         }
       } catch (error) {
         if (error) this.omegga.whisper(player, error);
