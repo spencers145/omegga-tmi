@@ -605,7 +605,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
             break;
           case "killhost":
             if (hostOnline) {
-              if (random < 1 / 100) {
+              if (random < 2 / 100) {
                 this.omegga.writeln(`Server.Players.Kill "${host.name}"`);
                 this.omegga.broadcast(
                   `<i>LUCKY!</i> <b>${interaction.player.name}</b> killed <b>${host.name}</b>!`
