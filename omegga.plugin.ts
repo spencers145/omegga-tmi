@@ -83,6 +83,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "kwak",
       "a Lightbulb Cousin",
       "Legal in Blockland",
       "3D-Thinking",
