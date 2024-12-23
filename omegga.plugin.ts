@@ -78,7 +78,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "seasoning": "Seasons player. Gives a special role if you get the right combo of 3.",
       "softlock": "Softlock prevention, probably.",
       "spook": "Very scary.",
-      "microeggs": "Gives a microegg, then any roles needed."
+      "microeggs": "Gives a microegg, then any roles needed.",
+      "sus": "Grants the sus microegg. Kills.",
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -125,7 +126,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.microeggs = [
       "door",
       "buff",
-      "placeholder",
+      "sus",
       "placeholder",
       "placeholder",
       "placeholder",
@@ -845,7 +846,11 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "microeggs":
                 this.ensureGoodInput(commandArray, ["microegg"], 1)
                 this.addMicroEggToInventory(commandArray[2], thisPlayer);
-                break;    
+                break;
+              case "sus":
+                this.addMicroEggToInventory("sus", thisPlayer);
+                this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`)
+                break;
             }
           }
         } catch (error) {
