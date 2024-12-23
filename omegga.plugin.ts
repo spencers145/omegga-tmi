@@ -76,6 +76,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "outliner": "Determines if a player meets the requirements to get the outliner.",
       "seasoning": "Seasons player. Gives a special role if you get the right combo of 3.",
       "softlock": "Softlock prevention, probably.",
+      "spook": "Very scary.",
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -83,6 +84,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "very scared",
+      "Just a Bit Too Big",
       "kwak",
       "a Lightbulb Cousin",
       "Legal in Blockland",
@@ -782,6 +785,11 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "softlock":
                 this.addColorToInventory("Soft(lock) Purple", thisPlayer);
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Softlock Prevention" "${interaction.player.name}"`);
+                this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`)
+                break;
+              case "spook":
+                this.addColorToInventory("TERRIFYING Black", thisPlayer);
+                this.omegga.writeln(`Chat.Command /GRANTROLE "very scared" "${interaction.player.name}"`);
                 this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`)
                 break;
             }
