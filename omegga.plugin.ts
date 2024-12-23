@@ -80,6 +80,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "spook": "Very scary.",
       "microeggs": "Gives a microegg, then any roles needed.",
       "sus": "Grants the sus microegg. Kills.",
+      "menacing": "HO HO.",
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -87,6 +88,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "Menacing",
       "No Half-Measures",
       "Half Hunter",
       "It's a Start",
@@ -850,6 +852,12 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "sus":
                 this.addMicroEggToInventory("sus", thisPlayer);
                 this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`)
+                break;
+              case "menacing":
+                const position = await thisPlayer.getPosition()
+                this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" ${position[0] - 1986} ${position[1] - 14} ${position[2] - 269} 0`);
+                this.omegga.writeln(`Chat.Command /GRANTROLE "Menacing" "${interaction.player.name}"`);
+                this.addColorToInventory("Big Gray", thisPlayer);
                 break;
             }
           }
