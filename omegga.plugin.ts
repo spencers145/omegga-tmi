@@ -78,6 +78,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "seasoning": "Seasons player. Gives a special role if you get the right combo of 3.",
       "softlock": "Softlock prevention, probably.",
       "spook": "Very scary.",
+      "microeggs": "Gives a microegg, then any roles needed."
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -370,7 +371,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         if (!Object.keys(this.customCommands).includes(input)) throw `ERROR: Argument #${index} needs to be a custom command, but instead, it's ${input || "nothing"}.`
         break;
       case "microegg":
-        if (!Object.keys(this.customCommands).includes(input)) throw `ERROR: Argument #${index} needs to be a custom command, but instead, it's ${input || "nothing"}.`
+        if (!Object.keys(this.customCommands).includes(input)) throw `ERROR: Argument #${index} needs to be a valid microegg, but instead, it's ${input || "nothing"}.`
       }
     });
   }
