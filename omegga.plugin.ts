@@ -28,6 +28,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
   seasonings: Record<PlayerID, Array<string>>;
 
   eggs: Array<string>;
+  microeggs: Array<string>;
 
   constructor(omegga: OL, config: PC, store: PS) {
     this.omegga = omegga;
@@ -84,6 +85,9 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "No Half-Measures",
+      "Half Hunter",
+      "It's a Start",
       "very scared",
       "Just a Bit Too Big",
       "kwak",
@@ -115,6 +119,19 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "Smoke Detector",
       "I CAN'T STOP WINNING",
       "Fire Escape"
+    ]
+
+    this.microeggs = [
+      "door",
+      "buff",
+      "placeholder",
+      "placeholder",
+      "placeholder",
+      "placeholder",
+      "placeholder",
+      "placeholder",
+      "placeholder",
+      "placeholder"
     ]
 
     this.seasonings = {};
@@ -351,6 +368,9 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         break;
       case "customCommand":
         if (!Object.keys(this.customCommands).includes(input)) throw `ERROR: Argument #${index} needs to be a custom command, but instead, it's ${input || "nothing"}.`
+        break;
+      case "microegg":
+        if (!Object.keys(this.customCommands).includes(input)) throw `ERROR: Argument #${index} needs to be a custom command, but instead, it's ${input || "nothing"}.`
       }
     });
   }
@@ -360,6 +380,35 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     const green = (colorObject.g < 16 ? "0" : "") + colorObject.g.toString(16)
     const blue = (colorObject.b < 16 ? "0" : "") + colorObject.b.toString(16)
     return red + green + blue
+  }
+
+  async addMicroEggToInventory(targetEgg: string, player: OmeggaPlayer) {
+    const storeKey = "microeggInventory." + player.id;
+    if (!(await this.store.keys()).includes(storeKey)) {
+      await this.store.set(storeKey, [])
+    }
+    const inventory = await this.store.get(storeKey) as Array<string>
+
+    if (!inventory.includes(targetEgg)) {
+      inventory.push(targetEgg)
+      inventory.sort()
+
+      await this.store.set(storeKey, inventory)
+
+      this.omegga.whisper(player.name, `You've found an microegg. <b>${inventory.length}/${this.microeggs.length}</>.`);
+      if (inventory.length/this.microeggs.length >= 1) {
+        this.addColorToInventory("Micro Blue", player)
+        this.omegga.writeln(`Chat.Command /GRANTROLE "No Half-Measures" "${player.name}"`)
+      }
+      if (inventory.length/this.microeggs.length >= 0.5) {
+        this.omegga.writeln(`Chat.Command /GRANTROLE "Halfway Hunter" "${player.name}"`)
+      }
+      if (inventory.length >= 1) {
+        this.omegga.writeln(`Chat.Command /GRANTROLE "It's a Start" "${player.name}"`)
+      }
+    } else {
+      this.omegga.whisper(player.name, `You've already found this microegg. <b>${inventory.length}/${this.microeggs.length}</>.`);
+    }
   }
 
   async addColorToInventory(targetRole: string, player: OmeggaPlayer) {
@@ -792,6 +841,10 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 this.omegga.writeln(`Chat.Command /GRANTROLE "very scared" "${interaction.player.name}"`);
                 this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`)
                 break;
+              case "microeggs":
+                this.ensureGoodInput(commandArray, ["microegg"], 1)
+                this.addMicroEggToInventory(commandArray[2], thisPlayer);
+                break;    
             }
           }
         } catch (error) {
