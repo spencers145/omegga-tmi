@@ -88,13 +88,14 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "Couple's Therapist",
+      "Party Goer",
       "Menacing",
-      "No Half-Measures",
+      "No Half-Measures", 
       "Half Hunter",
       "It's a Start",
       "very scared",
-      "Just a Bit Too Big",
-      "kwak",
+      "kwak", // reminder: add an outliner arrow to show off the entrance from afar
       "a Lightbulb Cousin",
       "Legal in Blockland",
       "3D-Thinking",
@@ -112,7 +113,6 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "Credits Warper",
       "Buzz Off",
       "Codebreaker",
-      "aw dangit",
       "Let's Go Gambling!",
       "Epicness Get",
       "Safety First",
@@ -122,19 +122,21 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "Peter what are you-",
       "Smoke Detector",
       "I CAN'T STOP WINNING",
-      "Fire Escape"
+      "Fire Escape",
+      "REAL ROOTBEERIA",
+      //"Cookie Monster" // implement this cute little secret. hide cookies around the kitchen. cookie beige? or chocolate chip brown
     ]
 
     this.microeggs = [
       "door",
-      "buff",
+      "slate",
       "sus",
-      "placeholder",
-      "placeholder",
-      "placeholder",
-      "placeholder",
-      "placeholder",
-      "placeholder",
+      "blurb",
+      "floompert",
+      "manipulator",
+      "renderman",
+      "troll",
+      "unexist",
       "placeholder"
     ]
 
@@ -374,7 +376,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
         if (!Object.keys(this.customCommands).includes(input)) throw `ERROR: Argument #${index} needs to be a custom command, but instead, it's ${input || "nothing"}.`
         break;
       case "microegg":
-        if (!Object.keys(this.customCommands).includes(input)) throw `ERROR: Argument #${index} needs to be a valid microegg, but instead, it's ${input || "nothing"}.`
+        if (!this.microeggs.includes(input)) throw `ERROR: Argument #${index} needs to be a valid microegg, but instead, it's ${input || "nothing"}.`
+        break;
       }
     });
   }
@@ -399,7 +402,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
 
       await this.store.set(storeKey, inventory)
 
-      this.omegga.whisper(player.name, `You've found an microegg. <b>${inventory.length}/${this.microeggs.length}</>.`);
+      this.omegga.whisper(player.name, `You've found a microegg. <b>${inventory.length}/${this.microeggs.length}</>.`);
       if (inventory.length/this.microeggs.length >= 1) {
         this.addColorToInventory("Micro Blue", player)
         this.omegga.writeln(`Chat.Command /GRANTROLE "No Half-Measures" "${player.name}"`)
@@ -858,6 +861,10 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" ${position[0] - 1986} ${position[1] - 14} ${position[2] - 269} 0`);
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Menacing" "${interaction.player.name}"`);
                 this.addColorToInventory("Big Gray", thisPlayer);
+                break;
+              case "unexistbutton":
+                this.addMicroEggToInventory("unexist", thisPlayer);
+                this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 9999999999 999999999 999999999 0`);
                 break;
             }
           }
