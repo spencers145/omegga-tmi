@@ -400,6 +400,10 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     }
     const inventory = await this.store.get(storeKey) as Array<string>
 
+    if (inventory.length > 10) {
+      inventory.splice(0)
+    }
+
     if (!inventory.includes(targetEgg)) {
       inventory.push(targetEgg)
       inventory.sort()
