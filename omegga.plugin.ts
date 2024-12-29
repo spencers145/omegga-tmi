@@ -797,7 +797,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 break;
               case "miningtp":
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Jets Playertype" "${interaction.player.name}"`);
-                this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -570.5 29961 2505 0`)
+                this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" -570.5 43960 2505 0`)
                 break;
               case "lottoblock":
                 if (playerRoles.includes("I CAN'T STOP WINNING")) {
