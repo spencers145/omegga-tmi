@@ -96,7 +96,8 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "Half Hunter",
       "It's a Start",
       "very scared",
-      "kwak", // reminder: add an outliner arrow to show off the entrance from afar
+      "kwak",
+      "The Visitor",
       "a Lightbulb Cousin",
       "Legal in Blockland",
       "3D-Thinking",
@@ -125,7 +126,6 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "I CAN'T STOP WINNING",
       "Fire Escape",
       "REAL ROOTBEERIA",
-      //"Cookie Monster" // implement this cute little secret. hide cookies around the kitchen. cookie beige? or chocolate chip brown
     ]
 
     this.microeggs = [
@@ -138,7 +138,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "renderman",
       "troll",
       "unexist",
-      "placeholder"
+      "council"
     ]
 
     this.seasonings = {};
