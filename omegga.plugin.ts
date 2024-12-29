@@ -379,6 +379,9 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       case "microegg":
         if (!this.microeggs.includes(input)) throw `ERROR: Argument #${index} needs to be a valid microegg, but instead, it's ${input || "nothing"}.`
         break;
+      default:
+        // nothing necessary
+        break;
       }
     });
   }
@@ -850,7 +853,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 this.omegga.writeln(`Server.Players.Kill "${interaction.player.name}"`)
                 break;
               case "microeggs":
-                this.ensureGoodInput(commandArray, ["microegg"], 1)
+                this.ensureGoodInput(commandArray, ["none", "microegg"], 2)
                 this.addMicroEggToInventory(commandArray[2], thisPlayer);
                 break;
               case "sus":
