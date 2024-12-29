@@ -82,6 +82,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "sus": "Grants the sus microegg. Kills.",
       "menacing": "HO HO.",
       "unexistbutton": "bye lol",
+      "riddler": "Grants the roles for beating Thingie's riddles. Tells you you're stuck.",
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -89,6 +90,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "Decrypted Dynast",
       "Couple's Therapist",
       "Party Goer",
       "Menacing",
@@ -873,6 +875,11 @@ export default class basesCoolPlugin implements OmeggaPlugin {
               case "unexistbutton":
                 this.addMicroEggToInventory("unexist", thisPlayer);
                 this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 9999999999 999999999 999999999 0`);
+                break;
+              case "riddler":
+                this.addColorToInventory("Clever Blue", thisPlayer);
+                this.omegga.writeln(`Chat.Command /GRANTROLE "Decrypted Dynast" "${interaction.player.name}"`);
+                this.omegga.whisper(thisPlayer, "Congratulations! You're stuck here now. The prize of your greed.")
                 break;
             }
           }
