@@ -132,6 +132,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "REAL ROOTBEERIA",
       "Gardener",
       "Shrinkage",
+      "budnis",
     ]
 
     this.microeggs = [
