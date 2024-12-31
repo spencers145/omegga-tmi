@@ -83,6 +83,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "menacing": "HO HO.",
       "unexistbutton": "bye lol",
       "riddler": "Grants the roles for beating Thingie's riddles. Tells you you're stuck.",
+      "six": "Grants shrinkage role. Teleports to the tiny doorway.",
     };
     this.weapons = ['AntiMaterielRifle', 'ArmingSword', 'AssaultRifle', 'AutoShotgun', 'Battleaxe', 'Bazooka', 'Bow', 'BullpupRifle', 'BullpupSMG', 'ChargedLongsword', 'CrystalKalis', 'Derringer', 'FlintlockPistol', 'GrenadeLauncher', 'Handaxe', 'HealthPotion', 'HeavyAssaultRifle', 'HeavySMG', 'HeroSword', 'HighPowerPistol', 'HoloBlade', 'HuntingShotgun', 'Ikakalaka', 'ImpactGrenade', 'ImpactGrenadeLauncher', 'ImpulseGrenade', 'Khopesh', 'Knife', 'LeverActionRifle', 'LightMachineGun', 'LongSword', 'MagnumPistol', 'MicroSMG', 'Minigun', 'Pistol', 'PulseCarbine', 'QuadLauncher', 'Revolver', 'RocketJumper', 'RocketLauncher', 'Sabre', 'SemiAutoRifle', 'ServiceRifle', 'Shotgun', 'SlugShotgun', 'Sniper', 'Spatha', 'StandardSubmachineGun', 'StickGrenade', 'SubmachineGun', 'SuperShotgun', 'SuppressedAssaultRifle', 'SuppressedBullpupSMG', 'SuppressedPistol', 'SuppressedServiceRifle', 'TacticalShotgun', 'TacticalSMG', 'Tomahawk', 'TwinCannon', 'TypewriterSMG', 'Zweihander']
     this.debounceNames = {};
@@ -883,6 +884,11 @@ export default class basesCoolPlugin implements OmeggaPlugin {
                 this.addColorToInventory("Clever Blue", thisPlayer);
                 this.omegga.writeln(`Chat.Command /GRANTROLE "Decrypted Dynast" "${interaction.player.name}"`);
                 this.omegga.whisper(thisPlayer, "Congratulations! You're stuck here now. The prize of your greed.")
+                break;
+              case "six":
+                this.omegga.writeln(`Chat.Command /GRANTROLE "Shrinkage" "${interaction.player.name}"`);
+                this.omegga.writeln(`Chat.Command /TP "${interaction.player.name}" 77 -16083 -149 0`);
+                this.addColorToInventory("Biggest Beige", thisPlayer);
                 break;
             }
           }
