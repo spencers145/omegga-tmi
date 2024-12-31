@@ -474,14 +474,14 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     roles.forEach((role) => this.config["tmi-color-roles"].includes(role) ? colorRoles.push(role) : {})
     colorRoles.forEach((role) => {
       if (role !== targetColor) {
-        this.omegga.writeln(`Chat.Command /REVOKEROLE "${role}" "${player.name}"`)
+        this.omegga.writeln(`Chat.Command /REVOKEROLE \"${role}\" "${player.name}"`)
       }
     })
 
     if (roles.includes(targetColor)) {
-      this.omegga.writeln(`Chat.Command /REVOKEROLE "${targetColor}" "${player.name}"`)
+      this.omegga.writeln(`Chat.Command /REVOKEROLE \"${targetColor}\" "${player.name}"`)
     } else {
-      this.omegga.writeln(`Chat.Command /GRANTROLE "${targetColor}" "${player.name}"`)
+      this.omegga.writeln(`Chat.Command /GRANTROLE \"${targetColor}\" "${player.name}"`)
     }
   }
 
