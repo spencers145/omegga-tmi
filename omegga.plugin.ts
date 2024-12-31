@@ -129,6 +129,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "I CAN'T STOP WINNING",
       "Fire Escape",
       "REAL ROOTBEERIA",
+      "Gardener"
     ]
 
     this.microeggs = [
