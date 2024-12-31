@@ -90,6 +90,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
     this.playerIntervals = {};
 
     this.eggs = [
+      "bugpilled",
       "Decrypted Dynast",
       "Couple's Therapist",
       "Party Goer",
