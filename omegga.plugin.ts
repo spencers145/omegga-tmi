@@ -97,7 +97,7 @@ export default class basesCoolPlugin implements OmeggaPlugin {
       "Party Goer",
       "Menacing",
       "No Half-Measures", 
-      "Half Hunter",
+      "Halfway Hunter",
       "It's a Start",
       "very scared",
       "kwak",
